@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#cfa46f"/>
+  <path d="M0 95 C180 65 340 92 500 70 C730 38 930 88 1280 54 L1280 720 L0 720 Z" fill="#d7b682"/>
+  <path d="M92 582 C260 500 352 410 490 356 C650 292 834 268 1138 120" fill="none" stroke="#ead9b8" stroke-width="82" stroke-linecap="round"/>
+  <path d="M144 146 C250 206 344 254 502 356 C664 460 820 518 1118 604" fill="none" stroke="#e7cf9e" stroke-width="58" stroke-linecap="round"/>
+  <path d="M166 188 C236 142 362 140 444 190 L420 292 C328 326 216 300 150 250 Z" fill="#9c5d43"/>
+  <path d="M200 212 C268 182 348 184 404 218 L390 270 C320 288 238 274 190 246 Z" fill="#e8d1a4"/>
+  <text x="206" y="248" font-family="KaiTi, SimSun, Arial" font-size="25" fill="#4b2e24">修物局</text>
+  <path d="M778 104 C876 68 1010 76 1090 126 L1066 236 C958 272 836 244 760 186 Z" fill="#6f5945"/>
+  <text x="850" y="176" font-family="KaiTi, SimSun, Arial" font-size="25" fill="#f2dfbb">碑林院</text>
+  <path d="M880 466 C990 418 1120 432 1204 500 L1168 610 C1048 652 920 620 850 548 Z" fill="#8a5943"/>
+  <text x="942" y="548" font-family="KaiTi, SimSun, Arial" font-size="25" fill="#f2dfbb">夜市委托</text>
+  <path d="M420 498 C526 452 668 462 738 526 L704 634 C584 660 468 632 398 568 Z" fill="#7d6a4b"/>
+  <text x="492" y="558" font-family="KaiTi, SimSun, Arial" font-size="25" fill="#f2dfbb">构件堆场</text>
+  <circle cx="606" cy="356" r="20" fill="#7c4338"/>
+  <circle cx="684" cy="318" r="18" fill="#4e6f5c"/>
+  <rect x="734" y="360" width="50" height="34" rx="8" fill="#d8c090"/>
+  <circle cx="526" cy="414" r="17" fill="#bd784e"/>
+  <circle cx="820" cy="414" r="18" fill="#6f8a71"/>
+  <rect x="270" y="404" width="44" height="28" rx="7" fill="#a2453d"/>
+  <circle cx="514" cy="326" r="16" fill="#3f322d"/>
+  <rect x="502" y="342" width="24" height="42" rx="8" fill="#705144"/>
+  <rect x="900" y="110" width="310" height="134" rx="12" fill="#f0d9aa" opacity="0.88"/>
+  <text x="922" y="154" font-family="KaiTi, SimSun, Arial" font-size="24" fill="#4b2e24">开放地图验证</text>
+  <text x="922" y="192" font-family="KaiTi, SimSun, Arial" font-size="19" fill="#4b2e24">玩家可在坊市、碑林、修物局、夜市之间自由移动</text>
+  <text x="80" y="676" font-family="KaiTi, SimSun, Arial" font-size="32" fill="#4b2e24">Hand-Painted Guanzhong Open Map - closer to Plant Tales spatial flow</text>
+</svg>

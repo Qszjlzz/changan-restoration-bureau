@@ -1,0 +1,91 @@
+{
+  "project": "ChanganRestorationBureau",
+  "version": "0.1.0-proof",
+  "unity_defaults": {
+    "pixels_per_unit": 100,
+    "compression": "None",
+    "mesh_type": "FullRect"
+  },
+  "slots": [
+    { "id": "workbench_slot", "type": "WorkbenchSlot", "position": [-2.8, -0.8], "size_units": [3.0, 1.0], "pivot": "bottom_center" },
+    { "id": "display_slot_01", "type": "DisplayCaseSlot", "position": [1.4, 0.7], "size_units": [1.0, 1.0], "pivot": "center" },
+    { "id": "display_slot_02", "type": "DisplayCaseSlot", "position": [2.5, 0.7], "size_units": [1.0, 1.0], "pivot": "center" },
+    { "id": "display_slot_03", "type": "DisplayCaseSlot", "position": [3.6, 0.7], "size_units": [1.0, 1.0], "pivot": "center" },
+    { "id": "shelf_slot_01", "type": "ShelfSlot", "position": [-4.0, 1.5], "size_units": [1.0, 1.0], "pivot": "center" },
+    { "id": "inventory_slot_01", "type": "InventorySlot", "position": [0, 0], "size_units": [1.0, 1.0], "pivot": "center" }
+  ],
+  "assets": [
+    {
+      "id": "artifact_terracotta_fragment",
+      "display_name": "陶俑残片",
+      "category": "artifact",
+      "expected_file": "artifact_terracotta_fragment.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "秦汉风物",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    },
+    {
+      "id": "artifact_roof_tile",
+      "display_name": "莲纹瓦当",
+      "category": "artifact",
+      "expected_file": "artifact_roof_tile.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "汉唐建筑",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    },
+    {
+      "id": "artifact_bronze_mirror",
+      "display_name": "旧铜镜",
+      "category": "artifact",
+      "expected_file": "artifact_bronze_mirror.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "闺阁器用",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    },
+    {
+      "id": "artifact_rubbing",
+      "display_name": "残碑拓片",
+      "category": "artifact",
+      "expected_file": "artifact_rubbing.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "碑林文字",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    },
+    {
+      "id": "artifact_tangsancai",
+      "display_name": "唐三彩碎片",
+      "category": "artifact",
+      "expected_file": "artifact_tangsancai.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "盛唐釉色",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    },
+    {
+      "id": "artifact_bamboo_slip",
+      "display_name": "旧木简",
+      "category": "artifact",
+      "expected_file": "artifact_bamboo_slip.png",
+      "spec": "artifact_small",
+      "scene_usage": "selectable proof artifact",
+      "initial_state": "damaged",
+      "era_tag": "关中旧档",
+      "sorting_layer": "Props",
+      "collider": "CircleCollider2D"
+    }
+  ]
+}

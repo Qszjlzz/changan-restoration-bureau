@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#d8cfb5"/>
+  <rect x="92" y="82" width="738" height="518" rx="6" fill="#2d2924"/>
+  <rect x="104" y="94" width="714" height="494" rx="4" fill="#d6c6a0"/>
+  <rect x="130" y="128" width="662" height="414" fill="#eee0bd"/>
+  <rect x="170" y="385" width="330" height="85" fill="#3f332b"/>
+  <rect x="178" y="393" width="314" height="69" fill="#70523d"/>
+  <rect x="560" y="235" width="205" height="170" fill="#2d2924"/>
+  <rect x="572" y="247" width="181" height="146" fill="#604b39"/>
+  <rect x="588" y="263" width="149" height="98" fill="#b8a071"/>
+  <circle cx="245" cy="345" r="36" fill="#2d2924"/>
+  <circle cx="245" cy="345" r="27" fill="#9a5546"/>
+  <rect x="328" y="318" width="72" height="54" fill="#2d2924"/>
+  <rect x="338" y="328" width="52" height="34" fill="#8f403b"/>
+  <circle cx="448" cy="340" r="31" fill="#2d2924"/>
+  <circle cx="448" cy="340" r="22" fill="#566b60"/>
+  <rect x="386" y="492" width="68" height="122" fill="#2d2924"/>
+  <rect x="396" y="504" width="48" height="108" fill="#5c463b"/>
+  <rect x="880" y="110" width="310" height="470" rx="4" fill="#2d2924"/>
+  <rect x="892" y="122" width="286" height="446" rx="2" fill="#eadbb8"/>
+  <rect x="916" y="152" width="238" height="40" fill="#9e3f36"/>
+  <rect x="916" y="224" width="208" height="30" fill="#a78b5c"/>
+  <rect x="916" y="280" width="238" height="30" fill="#a78b5c"/>
+  <rect x="916" y="350" width="112" height="60" fill="#4f665b"/>
+  <rect x="1046" y="350" width="108" height="60" fill="#7a4d3d"/>
+  <circle cx="1138" cy="506" r="34" fill="#a3332e"/>
+  <text x="100" y="665" font-family="SimSun, Arial" font-size="34" fill="#2d2924">Pixel Ink - strongest identity, strictest asset rules</text>
+</svg>

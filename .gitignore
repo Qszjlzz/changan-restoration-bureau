@@ -1,0 +1,31 @@
+# Unity generated folders
+unity/ChanganRestorationBureau/Library/
+unity/ChanganRestorationBureau/Temp/
+unity/ChanganRestorationBureau/Obj/
+unity/ChanganRestorationBureau/Logs/
+unity/ChanganRestorationBureau/UserSettings/
+
+# Local builds and logs
+Build/
+*.log
+
+# IDE and OS noise
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.DS_Store
+Thumbs.db
+
+# Keep generated art sources and production assets in this prototype repo.
+!assets/generated/
+!unity/ChanganRestorationBureau/Assets/Art/Generated/
