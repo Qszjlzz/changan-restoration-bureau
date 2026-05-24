@@ -29,3 +29,13 @@
 - Added proximity interaction targets for cleanup, sampling, repair, and display.
 - Added objective and interaction hint UI for the first loop: clean grass, sample relic, repair, display.
 - Unity batch build previously completed successfully, but the final rerun was blocked by the local Unity LicensingClient IPC timeout before the regenerated scene could be rebuilt into the executable.
+
+## 2026-05-25 Art Occlusion v0.4 Pass 1
+
+- Generated a hand-painted 4x4 relic/prop sprite sheet for damaged/repaired artifacts, grass, cleared grass, rubble, and old relic pile.
+- Added chroma-key removal and slicing to `tools/process_generated_art.py`, promoting outputs to production and Unity Production folders.
+- Updated the Unity scene builder so artifacts, grass, rubble, and relic pile prefer production sprites instead of procedural placeholders.
+- Added `Prop_RubbleStones` as a second cleanup interaction point and allowed cleanup props to swap to a cleared-state sprite.
+- Updated AssetCatalog and source prompts to mark v0.4 relic/prop assets as production-linked.
+- Unity batch build succeeded and produced `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`.
+- Remaining polish: inspect in Play Mode for sprite scale/edge fringes, then add true foreground split layers for roofs/walls/tree crowns.

@@ -13,6 +13,8 @@ def ensure_dirs() -> None:
         PRODUCTION / "backgrounds",
         PRODUCTION / "landmarks",
         PRODUCTION / "characters",
+        PRODUCTION / "artifacts",
+        PRODUCTION / "props",
         PRODUCTION / "ui",
         UNITY_PRODUCTION,
     ]:
@@ -29,6 +31,23 @@ def remove_green(image: Image.Image, tolerance: int = 70) -> Image.Image:
         else:
             if g > r and g > b:
                 g = min(g, max(r, b) + 10)
+            out.append((r, g, b, a))
+    rgba.putdata(out)
+    return rgba
+
+
+def remove_magenta(image: Image.Image, tolerance: int = 70) -> Image.Image:
+    rgba = image.convert("RGBA")
+    out = []
+    for r, g, b, a in rgba.getdata():
+        is_magenta = r > 170 and b > 170 and g < 90 and (r - g) > tolerance and (b - g) > tolerance
+        is_fringe = r > 115 and b > 115 and g < 155 and abs(r - b) < 95 and (r - g) > 35 and (b - g) > 35
+        if is_magenta or is_fringe:
+            out.append((r, g, b, 0))
+        else:
+            if r > 140 and b > 140 and g < 150:
+                r = min(r, max(g + 25, 95))
+                b = min(b, max(g + 25, 95))
             out.append((r, g, b, a))
     rgba.putdata(out)
     return rgba
@@ -57,6 +76,19 @@ def fit_canvas(image: Image.Image, size: tuple[int, int]) -> Image.Image:
     canvas = Image.new("RGBA", size, (0, 0, 0, 0))
     x = (target_w - new_size[0]) // 2
     y = target_h - new_size[1]
+    canvas.alpha_composite(resized, (x, y))
+    return canvas
+
+
+def fit_canvas_center(image: Image.Image, size: tuple[int, int]) -> Image.Image:
+    rgba = image.convert("RGBA")
+    target_w, target_h = size
+    scale = min(target_w / rgba.width, target_h / rgba.height)
+    new_size = (max(1, int(rgba.width * scale)), max(1, int(rgba.height * scale)))
+    resized = rgba.resize(new_size, Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", size, (0, 0, 0, 0))
+    x = (target_w - new_size[0]) // 2
+    y = (target_h - new_size[1]) // 2
     canvas.alpha_composite(resized, (x, y))
     return canvas
 
@@ -136,12 +168,56 @@ def process_ui() -> None:
         copy_to_unity(out, name)
 
 
+def process_artifacts_and_props() -> None:
+    sheet_path = STAGING / "artifacts" / "relic_prop_sheet_alpha.png"
+    if not sheet_path.exists():
+        sheet_path = STAGING / "artifacts" / "relic_prop_sheet_raw.png"
+        if not sheet_path.exists():
+            return
+
+    raw = Image.open(sheet_path)
+    w, h = raw.size
+    cell_w = w // 4
+    cell_h = h // 4
+    cells = [
+        ("artifacts", "artifact_terracotta_fragment_damaged.png", 0, 0, (256, 256), "center"),
+        ("artifacts", "artifact_terracotta_fragment_repaired.png", 1, 0, (256, 256), "center"),
+        ("artifacts", "artifact_roof_tile_damaged.png", 2, 0, (256, 256), "center"),
+        ("artifacts", "artifact_roof_tile_repaired.png", 3, 0, (256, 256), "center"),
+        ("artifacts", "artifact_bronze_mirror_damaged.png", 0, 1, (256, 256), "center"),
+        ("artifacts", "artifact_bronze_mirror_repaired.png", 1, 1, (256, 256), "center"),
+        ("artifacts", "artifact_rubbing_damaged.png", 2, 1, (256, 256), "center"),
+        ("artifacts", "artifact_rubbing_repaired.png", 3, 1, (256, 256), "center"),
+        ("artifacts", "artifact_tangsancai_damaged.png", 0, 2, (256, 256), "center"),
+        ("artifacts", "artifact_tangsancai_repaired.png", 1, 2, (256, 256), "center"),
+        ("artifacts", "artifact_bamboo_slip_damaged.png", 2, 2, (256, 256), "center"),
+        ("artifacts", "artifact_bamboo_slip_repaired.png", 3, 2, (256, 256), "center"),
+        ("props", "prop_grass_patch.png", 0, 3, (512, 512), "bottom"),
+        ("props", "prop_cleared_grass.png", 1, 3, (512, 512), "bottom"),
+        ("props", "prop_rubble_stones.png", 2, 3, (512, 512), "bottom"),
+        ("props", "prop_relic_pile.png", 3, 3, (512, 512), "bottom"),
+    ]
+
+    for folder, name, col, row, size, anchor in cells:
+        box = (col * cell_w, row * cell_h, (col + 1) * cell_w, (row + 1) * cell_h)
+        cell = raw.crop(box)
+        if cell.mode == "RGBA" and cell.getchannel("A").getbbox() is not None:
+            cutout = crop_alpha_bounds(cell, 10)
+        else:
+            cutout = crop_alpha_bounds(remove_magenta(cell), 10)
+        fitted = fit_canvas(cutout, size) if anchor == "bottom" else fit_canvas_center(cutout, size)
+        out = PRODUCTION / folder / name
+        fitted.save(out)
+        copy_to_unity(out, name)
+
+
 def main() -> None:
     ensure_dirs()
     process_background()
     process_landmarks()
     process_character()
     process_ui()
+    process_artifacts_and_props()
 
 
 if __name__ == "__main__":

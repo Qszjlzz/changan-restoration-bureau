@@ -80,8 +80,10 @@ public static class ChanganProofSceneBuilder
         output["landmark_relic_yard"] = LoadProductionOrGenerate("landmark_relic_yard", 1024, 1024, new Color32(126, 105, 75, 255), SpritePivot.BottomCenter, TexturePattern.RelicYard);
         output["furniture_workbench"] = GenerateSprite("furniture_workbench", 512, 512, new Color32(126, 78, 48, 255), SpritePivot.BottomCenter, TexturePattern.Workbench);
         output["furniture_display_case"] = GenerateSprite("furniture_display_case", 512, 512, new Color32(95, 70, 50, 255), SpritePivot.BottomCenter, TexturePattern.DisplayCase);
-        output["prop_grass_patch"] = GenerateSprite("prop_grass_patch", 512, 512, new Color32(87, 126, 73, 255), SpritePivot.BottomCenter, TexturePattern.GrassPatch);
-        output["prop_relic_pile"] = GenerateSprite("prop_relic_pile", 512, 512, new Color32(145, 101, 73, 255), SpritePivot.BottomCenter, TexturePattern.RelicPile);
+        output["prop_grass_patch"] = LoadProductionOrGenerate("prop_grass_patch", 512, 512, new Color32(87, 126, 73, 255), SpritePivot.BottomCenter, TexturePattern.GrassPatch);
+        output["prop_cleared_grass"] = LoadProductionOrGenerate("prop_cleared_grass", 512, 512, new Color32(169, 128, 74, 255), SpritePivot.BottomCenter, TexturePattern.GrassPatch);
+        output["prop_rubble_stones"] = LoadProductionOrGenerate("prop_rubble_stones", 512, 512, new Color32(142, 120, 94, 255), SpritePivot.BottomCenter, TexturePattern.RelicPile);
+        output["prop_relic_pile"] = LoadProductionOrGenerate("prop_relic_pile", 512, 512, new Color32(145, 101, 73, 255), SpritePivot.BottomCenter, TexturePattern.RelicPile);
         output["character_keeper_idle"] = LoadProductionOrGenerate("character_keeper_idle", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
         output["character_keeper_down"] = LoadProductionOrGenerate("character_keeper_down", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
         output["character_keeper_up"] = LoadProductionOrGenerate("character_keeper_up", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
@@ -90,8 +92,8 @@ public static class ChanganProofSceneBuilder
 
         foreach (var seed in ArtifactSeeds)
         {
-            output[$"{seed.Id}_damaged"] = GenerateSprite($"{seed.Id}_damaged", 256, 256, seed.DamagedColor, SpritePivot.Center, TexturePattern.ArtifactDamaged);
-            output[$"{seed.Id}_repaired"] = GenerateSprite($"{seed.Id}_repaired", 256, 256, seed.RepairedColor, SpritePivot.Center, TexturePattern.ArtifactRepaired);
+            output[$"{seed.Id}_damaged"] = LoadProductionOrGenerate($"{seed.Id}_damaged", 256, 256, seed.DamagedColor, SpritePivot.Center, TexturePattern.ArtifactDamaged);
+            output[$"{seed.Id}_repaired"] = LoadProductionOrGenerate($"{seed.Id}_repaired", 256, 256, seed.RepairedColor, SpritePivot.Center, TexturePattern.ArtifactRepaired);
         }
 
         return output;
@@ -283,8 +285,9 @@ public static class ChanganProofSceneBuilder
     {
         CreateFurnitureObject("Furniture_Workbench", sprites["furniture_workbench"], new Vector2(-4.15f, 1.05f), 18);
         CreateFurnitureObject("Furniture_DisplayCase", sprites["furniture_display_case"], new Vector2(-2.05f, 1.0f), 16);
-        CreateCleanupProp("Prop_GrassPatch_01", sprites["prop_grass_patch"], new Vector2(1.7f, -2.15f), 12);
-        CreateCleanupProp("Prop_GrassPatch_02", sprites["prop_grass_patch"], new Vector2(2.35f, -2.55f), 12);
+        CreateCleanupProp("Prop_GrassPatch_01", sprites["prop_grass_patch"], sprites["prop_cleared_grass"], new Vector2(1.7f, -2.15f), 12, "按 E 清理荒草");
+        CreateCleanupProp("Prop_GrassPatch_02", sprites["prop_grass_patch"], sprites["prop_cleared_grass"], new Vector2(2.35f, -2.55f), 12, "按 E 清理荒草");
+        CreateCleanupProp("Prop_RubbleStones", sprites["prop_rubble_stones"], null, new Vector2(3.15f, -2.2f), 12, "按 E 清理碎石");
         CreateFurnitureObject("Prop_RelicPile", sprites["prop_relic_pile"], new Vector2(4.35f, -2.35f), 13);
     }
 
@@ -300,7 +303,7 @@ public static class ChanganProofSceneBuilder
         sorter.offset = order;
     }
 
-    private static void CreateCleanupProp(string name, Sprite sprite, Vector2 position, int order)
+    private static void CreateCleanupProp(string name, Sprite sprite, Sprite clearedSprite, Vector2 position, int order, string prompt)
     {
         var obj = new GameObject(name);
         obj.transform.position = position;
@@ -313,9 +316,10 @@ public static class ChanganProofSceneBuilder
         var collider = obj.AddComponent<BoxCollider2D>();
         collider.size = new Vector2(1.1f, 0.7f);
         var cleanup = obj.AddComponent<MapCleanupInteractable>();
+        cleanup.clearedSprite = clearedSprite;
         var target = obj.AddComponent<InteractionTarget>();
         target.kind = InteractionKind.Cleanup;
-        target.prompt = "按 E 清理荒草";
+        target.prompt = prompt;
         target.cleanup = cleanup;
     }
 

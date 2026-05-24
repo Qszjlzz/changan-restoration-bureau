@@ -6,6 +6,7 @@ namespace ChanganRestorationBureau
     public sealed class MapCleanupInteractable : MonoBehaviour
     {
         public string displayName = "可清理荒草";
+        public Sprite clearedSprite;
         public bool IsCleared { get; private set; }
 
         private SpriteRenderer spriteRenderer;
@@ -32,7 +33,15 @@ namespace ChanganRestorationBureau
             IsCleared = true;
             if (spriteRenderer != null)
             {
-                spriteRenderer.color = new Color(0.65f, 0.65f, 0.65f, 0.35f);
+                if (clearedSprite != null)
+                {
+                    spriteRenderer.sprite = clearedSprite;
+                    spriteRenderer.color = Color.white;
+                }
+                else
+                {
+                    spriteRenderer.color = new Color(0.65f, 0.65f, 0.65f, 0.35f);
+                }
             }
         }
     }
