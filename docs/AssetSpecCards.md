@@ -1,5 +1,13 @@
 # Asset Spec Cards
 
+## Placement Invariant
+
+- Art generation path: use the built-in GPT Image generator first, then copy raw outputs into `assets/generated/staging`.
+- Promotion path: staging image -> local cleanup/slicing -> `assets/generated/production` -> Unity `Assets/Art/Generated/Production`.
+- Do not push art replacement work until the production PNGs exist and Unity can import them.
+- Replacing an asset must keep the original scene position, slot id, pivot, PPU, scale, and collider contract unless a RunLog entry explicitly records why the placement spec changed.
+- If a sprite looks wrong in Unity, fix the prompt, cleanup, crop, pivot, or import mapping before moving the individual object by hand.
+
 ## background_shop_interior
 
 - Category: background

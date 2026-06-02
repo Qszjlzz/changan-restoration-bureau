@@ -44,6 +44,8 @@ Generated image files are intentionally tracked for this prototype because they 
 
 Recommended LFS file types are already listed in `.gitattributes`: PNG, JPG, PSD, Aseprite, audio, video, FBX, and Blender files.
 
+Do not push an art pass until its GPT Image outputs have been copied into staging, processed into production PNGs, imported into Unity, and validated in the generated proof scene. Asset replacement should preserve existing scene positions, pivots, slots, scales, and collider rules; visual mismatch should be fixed through prompt/cleanup/import adjustments before moving objects.
+
 ## Release Rhythm
 
 Use small proof milestones:
