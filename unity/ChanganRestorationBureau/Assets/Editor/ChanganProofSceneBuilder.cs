@@ -39,6 +39,7 @@ public static class ChanganProofSceneBuilder
             CreateLandmarks(sprites);
         }
         CreateFurniture(sprites);
+        CreateForegroundOccluders(sprites);
         var player = CreatePlayer(sprites);
         var follow = camera.gameObject.AddComponent<ProofCameraFollow>();
         follow.target = player.transform;
@@ -84,6 +85,10 @@ public static class ChanganProofSceneBuilder
         output["prop_cleared_grass"] = LoadProductionOrGenerate("prop_cleared_grass", 512, 512, new Color32(169, 128, 74, 255), SpritePivot.BottomCenter, TexturePattern.GrassPatch);
         output["prop_rubble_stones"] = LoadProductionOrGenerate("prop_rubble_stones", 512, 512, new Color32(142, 120, 94, 255), SpritePivot.BottomCenter, TexturePattern.RelicPile);
         output["prop_relic_pile"] = LoadProductionOrGenerate("prop_relic_pile", 512, 512, new Color32(145, 101, 73, 255), SpritePivot.BottomCenter, TexturePattern.RelicPile);
+        output["foreground_bureau_eave"] = LoadProductionOrGenerate("foreground_bureau_eave", 768, 768, new Color32(166, 80, 54, 255), SpritePivot.BottomCenter, TexturePattern.Market);
+        output["foreground_tree_canopy"] = LoadProductionOrGenerate("foreground_tree_canopy", 768, 768, new Color32(89, 122, 72, 255), SpritePivot.BottomCenter, TexturePattern.GrassPatch);
+        output["foreground_market_awning"] = LoadProductionOrGenerate("foreground_market_awning", 768, 768, new Color32(164, 78, 55, 255), SpritePivot.BottomCenter, TexturePattern.Market);
+        output["foreground_wall_edge"] = LoadProductionOrGenerate("foreground_wall_edge", 768, 768, new Color32(172, 129, 83, 255), SpritePivot.BottomCenter, TexturePattern.RelicYard);
         output["character_keeper_idle"] = LoadProductionOrGenerate("character_keeper_idle", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
         output["character_keeper_down"] = LoadProductionOrGenerate("character_keeper_down", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
         output["character_keeper_up"] = LoadProductionOrGenerate("character_keeper_up", 512, 512, new Color32(82, 60, 50, 255), SpritePivot.BottomCenter, TexturePattern.Character);
@@ -289,6 +294,26 @@ public static class ChanganProofSceneBuilder
         CreateCleanupProp("Prop_GrassPatch_02", sprites["prop_grass_patch"], sprites["prop_cleared_grass"], new Vector2(2.35f, -2.55f), 12, "按 E 清理荒草");
         CreateCleanupProp("Prop_RubbleStones", sprites["prop_rubble_stones"], null, new Vector2(3.15f, -2.2f), 12, "按 E 清理碎石");
         CreateFurnitureObject("Prop_RelicPile", sprites["prop_relic_pile"], new Vector2(4.35f, -2.35f), 13);
+    }
+
+    private static void CreateForegroundOccluders(Dictionary<string, Sprite> sprites)
+    {
+        CreateForegroundObject("Foreground_BureauEave", sprites["foreground_bureau_eave"], new Vector2(-4.2f, 2.05f), 0.64f, 72);
+        CreateForegroundObject("Foreground_TreeCanopy", sprites["foreground_tree_canopy"], new Vector2(1.15f, 1.75f), 0.58f, 78);
+        CreateForegroundObject("Foreground_MarketAwning", sprites["foreground_market_awning"], new Vector2(-3.75f, -1.55f), 0.58f, 74);
+        CreateForegroundObject("Foreground_WallEdge", sprites["foreground_wall_edge"], new Vector2(3.65f, 0.25f), 0.52f, 76);
+    }
+
+    private static void CreateForegroundObject(string name, Sprite sprite, Vector2 position, float scale, int orderOffset)
+    {
+        var obj = new GameObject(name);
+        obj.transform.position = position;
+        obj.transform.localScale = Vector3.one * scale;
+        var renderer = obj.AddComponent<SpriteRenderer>();
+        renderer.sprite = sprite;
+        renderer.sortingOrder = orderOffset;
+        var sorter = obj.AddComponent<YSortRenderer>();
+        sorter.offset = orderOffset;
     }
 
     private static void CreateFurnitureObject(string name, Sprite sprite, Vector2 position, int order)

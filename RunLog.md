@@ -39,3 +39,12 @@
 - Updated AssetCatalog and source prompts to mark v0.4 relic/prop assets as production-linked.
 - Unity batch build succeeded and produced `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`.
 - Remaining polish: inspect in Play Mode for sprite scale/edge fringes, then add true foreground split layers for roofs/walls/tree crowns.
+
+## 2026-06-03 Art Occlusion v0.4 Pass 2
+
+- Generated a 2x2 foreground occlusion sprite sheet for bureau roof eave, tree canopy, market awning, and wall edge.
+- Added chroma-key cleanup, slicing, and production promotion for foreground assets.
+- Updated `AssetCatalog` and source prompts with `foreground_occlusion_sheet_v0_4`.
+- Added four foreground occluders to `AssetProofScene` through the Unity scene builder, all using `YSortRenderer`.
+- Unity batch build succeeded and produced `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`.
+- Remaining polish: playtest player movement around each occluder and tune scale/position if any object blocks an interaction point.

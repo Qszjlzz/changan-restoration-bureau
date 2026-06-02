@@ -15,6 +15,7 @@ def ensure_dirs() -> None:
         PRODUCTION / "characters",
         PRODUCTION / "artifacts",
         PRODUCTION / "props",
+        PRODUCTION / "foregrounds",
         PRODUCTION / "ui",
         UNITY_PRODUCTION,
     ]:
@@ -211,6 +212,37 @@ def process_artifacts_and_props() -> None:
         copy_to_unity(out, name)
 
 
+def process_foregrounds() -> None:
+    sheet_path = STAGING / "foregrounds" / "foreground_occlusion_sheet_alpha.png"
+    if not sheet_path.exists():
+        sheet_path = STAGING / "foregrounds" / "foreground_occlusion_sheet_raw.png"
+        if not sheet_path.exists():
+            return
+
+    raw = Image.open(sheet_path)
+    w, h = raw.size
+    cell_w = w // 2
+    cell_h = h // 2
+    cells = [
+        ("foreground_bureau_eave.png", 0, 0),
+        ("foreground_tree_canopy.png", 1, 0),
+        ("foreground_market_awning.png", 0, 1),
+        ("foreground_wall_edge.png", 1, 1),
+    ]
+
+    for name, col, row in cells:
+        box = (col * cell_w, row * cell_h, (col + 1) * cell_w, (row + 1) * cell_h)
+        cell = raw.crop(box)
+        if cell.mode == "RGBA" and cell.getchannel("A").getbbox() is not None:
+            cutout = crop_alpha_bounds(cell, 12)
+        else:
+            cutout = crop_alpha_bounds(remove_magenta(cell), 12)
+        fitted = fit_canvas(cutout, (768, 768))
+        out = PRODUCTION / "foregrounds" / name
+        fitted.save(out)
+        copy_to_unity(out, name)
+
+
 def main() -> None:
     ensure_dirs()
     process_background()
@@ -218,6 +250,7 @@ def main() -> None:
     process_character()
     process_ui()
     process_artifacts_and_props()
+    process_foregrounds()
 
 
 if __name__ == "__main__":

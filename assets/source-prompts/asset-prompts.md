@@ -26,6 +26,10 @@ Create a clean 4x4 sprite sheet for a hand-painted Guanzhong / Chang'an cultural
 
 Create transparent PNG 2D map props for interaction points: grass patch to clear, relic fragment pile, stele fragment, storage crate, clay jar, wooden sign without text. Cozy hand-painted Guanzhong style, bottom-center pivot, 512x512, no text, no logos, centered with transparent padding.
 
+## foreground_occlusion_sheet_v0_4
+
+Create a clean 2x2 sprite sheet on a perfectly flat solid #ff00ff chroma-key background for background removal. One isolated foreground occlusion sprite per cell: clay-red Chang'an shop roof eave with dark underside and wood beams, rounded locust tree canopy with warm green leaves, night-market fabric awning in muted red ochre, low rammed-earth wall corner / doorway edge with clay bricks. Warm hand-painted Guanzhong / Chang'an 2D game art, bottom-center pivot friendly, intended to render in front of the player when the player walks behind it, no text, no labels, no watermark.
+
 ## ui_kit
 
 Create a transparent PNG UI kit for a cozy Chang'an cultural relic restoration game: paper detail panel frame, repair button, display button, coin/funding icon, appraisal grade icon, material icon, close button, inventory slot frame. Aged paper, ink line, red seal accent, no readable text, clean game UI, 128-512 px elements.

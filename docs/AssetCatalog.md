@@ -44,6 +44,15 @@ This catalog is owned by the 2D Art Asset Agent. It defines the first playable p
 | `artifact_tangsancai` | 唐三彩碎片 damaged/repaired | `artifact_small` | production v0.4 | Select, repair, display |
 | `artifact_bamboo_slip` | 旧木简 damaged/repaired | `artifact_small` | production v0.4 | Select, repair, display |
 
+## Foreground Occlusion
+
+| ID | Asset | Spec | State | Use |
+| --- | --- | --- | --- | --- |
+| `foreground_bureau_eave` | 修物局屋檐前景 | `foreground_occluder` | production v0.4 | Player passes behind roof edge |
+| `foreground_tree_canopy` | 树冠前景 | `foreground_occluder` | production v0.4 | Player passes behind foliage |
+| `foreground_market_awning` | 夜市布棚前景 | `foreground_occluder` | production v0.4 | Market area occlusion proof |
+| `foreground_wall_edge` | 土墙门洞前景 | `foreground_occluder` | production v0.4 | Wall/door edge occlusion proof |
+
 ## UI
 
 | ID | Asset | Spec | State | Use |
