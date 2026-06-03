@@ -8,6 +8,7 @@ unity/ChanganRestorationBureau/UserSettings/
 # Local builds and logs
 Build/
 *.log
+RunArtifacts/
 
 # IDE and OS noise
 .vs/

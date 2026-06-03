@@ -24,7 +24,7 @@ public static class ChanganProofBuild
             scenes = new[] { ScenePath },
             locationPathName = exePath,
             target = BuildTarget.StandaloneWindows64,
-            options = BuildOptions.None
+            options = BuildOptions.CleanBuildCache
         };
 
         var report = BuildPipeline.BuildPlayer(options);

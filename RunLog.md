@@ -48,3 +48,12 @@
 - Added four foreground occluders to `AssetProofScene` through the Unity scene builder, all using `YSortRenderer`.
 - Unity batch build succeeded and produced `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`.
 - Remaining polish: playtest player movement around each occluder and tune scale/position if any object blocks an interaction point.
+
+## 2026-06-03 Runtime Launch Recovery
+
+- Re-tested `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`; the player process crashed during scene load with `level0 is corrupted` / `Position out of bounds`.
+- Confirmed a minimal Unity smoke build can launch, so the failure is specific to the generated proof scene or its serialized content, not the Windows player environment.
+- Added a lightweight `ChanganVisualPreview` build path that loads the current production map, female keeper, relic props, cleanup props, and foreground occluders while bypassing the crashing full proof scene.
+- Built and launched `Build/ChanganVisualPreview/ChanganVisualPreview.exe`, then copied and launched it from `C:\ChanganVisualPreview\ChanganVisualPreview.exe` for path-safe viewing.
+- Runtime evidence: `ChanganVisualPreview` stayed open with a valid window handle and no repeat of the `level0 corrupted` error in `Player.log`.
+- Next fix: isolate which object or UI serialization in `AssetProofScene` corrupts the full playable build, then merge the preview stability back into the official proof executable.
