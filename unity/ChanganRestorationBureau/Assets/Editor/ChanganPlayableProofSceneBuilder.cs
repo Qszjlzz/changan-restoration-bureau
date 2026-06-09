@@ -34,6 +34,7 @@ public static class ChanganPlayableProofSceneBuilder
         CreateLandmarks();
         CreateFurniture();
         CreateForegrounds();
+        CreateNpcAnchors();
         var player = CreatePlayer();
         CreateBoundaryWalls();
 
@@ -129,6 +130,13 @@ public static class ChanganPlayableProofSceneBuilder
         CreateProp("Foreground_TreeCanopy", LoadRequiredProductionSprite("foreground_tree_canopy", SpritePivot.BottomCenter), new Vector2(1.15f, 1.75f), 0.58f, 78);
         CreateProp("Foreground_MarketAwning", LoadRequiredProductionSprite("foreground_market_awning", SpritePivot.BottomCenter), new Vector2(-3.75f, -1.55f), 0.58f, 74);
         CreateProp("Foreground_WallEdge", LoadRequiredProductionSprite("foreground_wall_edge", SpritePivot.BottomCenter), new Vector2(3.65f, 0.25f), 0.52f, 76);
+    }
+
+    private static void CreateNpcAnchors()
+    {
+        CreateNpc("NPC_HanNiangzi", "han_niangzi", "Han Niangzi", new Vector2(-2.85f, -2.95f), 0.4f, new Color32(255, 228, 228, 255));
+        CreateNpc("NPC_ApprenticeDou", "apprentice_dou", "Apprentice Dou", new Vector2(-4.95f, 1.2f), 0.4f, new Color32(255, 236, 196, 255));
+        CreateNpc("NPC_SteleDu", "stele_du", "Stele Rubbing Du", new Vector2(4.95f, 1.75f), 0.4f, new Color32(235, 238, 245, 255));
     }
 
     private static GameObject CreatePlayer()
@@ -228,6 +236,44 @@ public static class ChanganPlayableProofSceneBuilder
         target.cleanup = cleanup;
     }
 
+    private static void CreateNpc(string name, string npcId, string displayName, Vector2 position, float scale, Color32 tint)
+    {
+        var sprite = LoadOptionalProductionSprite($"npc_{npcId}_idle", SpritePivot.BottomCenter) ?? LoadRequiredProductionSprite("character_keeper_idle", SpritePivot.BottomCenter);
+        var obj = new GameObject(name);
+        obj.transform.position = position;
+        obj.transform.localScale = Vector3.one * scale;
+        var renderer = obj.AddComponent<SpriteRenderer>();
+        renderer.sprite = sprite;
+        renderer.color = tint;
+        renderer.sortingOrder = 28;
+        var collider = obj.AddComponent<CircleCollider2D>();
+        collider.isTrigger = true;
+        collider.radius = 0.58f;
+        var sorter = obj.AddComponent<YSortRenderer>();
+        sorter.offset = 28;
+
+        var npc = obj.AddComponent<ProofNpcInteractable>();
+        npc.npcId = npcId;
+        npc.displayName = displayName;
+        npc.portraitSprite = LoadOptionalProductionSprite($"portrait_{npcId}", SpritePivot.Center);
+
+        var target = obj.AddComponent<InteractionTarget>();
+        target.kind = InteractionKind.Talk;
+        target.prompt = "Press E to talk";
+        target.npc = npc;
+
+        var label = new GameObject($"{name}_Label");
+        label.transform.SetParent(obj.transform, false);
+        label.transform.localPosition = new Vector3(0f, 1.65f, 0f);
+        var text = label.AddComponent<TextMesh>();
+        text.text = displayName;
+        text.fontSize = 28;
+        text.characterSize = 0.08f;
+        text.anchor = TextAnchor.MiddleCenter;
+        text.alignment = TextAlignment.Center;
+        text.color = new Color32(73, 45, 34, 255);
+    }
+
     private static GameObject CreateLandmark(string name, string spriteName, Vector2 position, int order, float scale)
     {
         var obj = new GameObject(name);
@@ -265,6 +311,11 @@ public static class ChanganPlayableProofSceneBuilder
     private static Sprite LoadOptionalProductionSprite(string name)
     {
         return LoadProductionSprite(name, SpritePivot.Center);
+    }
+
+    private static Sprite LoadOptionalProductionSprite(string name, SpritePivot pivot)
+    {
+        return LoadProductionSprite(name, pivot);
     }
 
     private static Sprite LoadProductionSprite(string name, SpritePivot pivot)

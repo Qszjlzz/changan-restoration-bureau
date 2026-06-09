@@ -26,10 +26,13 @@ if (-not (Test-Path $exePath)) {
 $playerLog = Join-Path $env:USERPROFILE "AppData\LocalLow\DefaultCompany\ChanganRestorationBureau\Player.log"
 $markers = @(
     "[Changan] ProofRuntimeBootstrap.Awake complete",
+    "[Changan] Commission accepted id=lotus_roof_tile_night_market",
     "[Changan] Objective marked cleared",
     "[Changan] Objective marked sampled",
     "[Changan] Objective marked repaired",
     "[Changan] Objective marked displayed",
+    "[Changan] Outcome resolved id=careful_exhibit",
+    "[Changan] Day summary shown",
     "[Changan] Smoke autoplay completed"
 )
 

@@ -8,6 +8,7 @@ namespace ChanganRestorationBureau
         public Text objectiveText;
         public Text hintText;
         public RestorationArtifact targetArtifact;
+        public ProofDayState dayState;
 
         public bool Cleared { get; private set; }
         public bool Sampled { get; private set; }
@@ -22,7 +23,20 @@ namespace ChanganRestorationBureau
                 targetArtifact.gameObject.SetActive(false);
             }
 
+            if (dayState != null)
+            {
+                dayState.StateChanged += Refresh;
+            }
+
             Refresh();
+        }
+
+        private void OnDestroy()
+        {
+            if (dayState != null)
+            {
+                dayState.StateChanged -= Refresh;
+            }
         }
 
         public void SetHint(string hint)
@@ -51,6 +65,10 @@ namespace ChanganRestorationBureau
             Sampled = true;
             targetArtifact = artifact;
             Debug.Log($"[Changan] Objective marked sampled artifact={(artifact != null ? artifact.artifactId : "none")}");
+            if (dayState != null)
+            {
+                dayState.MarkArtifactCollected();
+            }
             Refresh();
         }
 
@@ -58,6 +76,10 @@ namespace ChanganRestorationBureau
         {
             Repaired = true;
             Debug.Log("[Changan] Objective marked repaired");
+            if (dayState != null)
+            {
+                dayState.MarkRestorationReady();
+            }
             Refresh();
         }
 
@@ -75,25 +97,51 @@ namespace ChanganRestorationBureau
                 return;
             }
 
-            var step = "Clear the grass and find the relic";
-            if (Displayed)
+            var step = BuildStepText();
+            var phase = dayState != null ? dayState.currentPhase.ToString() : "Proof";
+            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1  Phase: {phase}";
+        }
+
+        private string BuildStepText()
+        {
+            if (dayState == null || !dayState.CommissionAccepted)
             {
-                step = "Completed: relic repaired and displayed";
-            }
-            else if (Repaired)
-            {
-                step = "Bring the relic to the display case";
-            }
-            else if (Sampled)
-            {
-                step = "Return to the bureau and repair the relic";
-            }
-            else if (Cleared)
-            {
-                step = "Sample the uncovered relic";
+                return "Talk to Han Niangzi at the night market";
             }
 
-            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1";
+            if (!Cleared)
+            {
+                return "Travel to the relic yard and clear the overgrowth";
+            }
+
+            if (!Sampled)
+            {
+                return "Sample the uncovered lotus roof tile";
+            }
+
+            if (!Repaired)
+            {
+                return dayState.HasConsultedSteleDu
+                    ? "Return to the bureau and restore the lotus roof tile"
+                    : "Optional: consult Stele Rubbing Du, then return to the bureau";
+            }
+
+            if (!Displayed)
+            {
+                return "Place the restored tile on the display stand";
+            }
+
+            if (dayState != null && !dayState.OutcomeResolved)
+            {
+                return "Return to Han Niangzi to resolve the commission";
+            }
+
+            if (dayState != null && !dayState.DaySummaryShown)
+            {
+                return "Talk to Apprentice Dou to write the day ledger";
+            }
+
+            return "Day complete. Prepare the next commission";
         }
     }
 }

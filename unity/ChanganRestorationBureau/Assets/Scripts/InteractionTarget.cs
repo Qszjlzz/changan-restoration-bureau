@@ -7,7 +7,8 @@ namespace ChanganRestorationBureau
         Cleanup,
         Sample,
         Repair,
-        Display
+        Display,
+        Talk
     }
 
     public sealed class InteractionTarget : MonoBehaviour
@@ -17,5 +18,6 @@ namespace ChanganRestorationBureau
         public RestorationArtifact artifact;
         public MapCleanupInteractable cleanup;
         public ProofSlot slot;
+        public ProofNpcInteractable npc;
     }
 }

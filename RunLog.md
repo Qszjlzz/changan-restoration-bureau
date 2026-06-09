@@ -98,3 +98,37 @@
 - Added `ProofDayState` plus `Assets/Resources/Data/ProofNarrativeCatalog.json` as the first in-engine data skeleton for the v0.5 commission slice `The Lotus Roof Tile Of The Night Market`.
 - Asset QA still passes with the same one non-blocking warning: `background_open_map.png` remains `3072x1728` instead of the written `3072x1792` spec.
 - Next gate: replace placeholder workbench/display visuals, add world anchors and first interactions for `Han Niangzi`, `Apprentice Dou`, and `Stele Rubbing Du`, then wire the first commission acceptance and day-phase transitions onto the new `ProofDayState`.
+
+## 2026-06-10 Narrative Skeleton Pass 1
+
+- Added the first runtime narrative layer to the stable playable proof:
+  - `ProofDialogueController`
+  - `ProofNpcInteractable`
+  - expanded `ProofDayState`
+- Added three world NPC anchors to the official `PlayableProofScene` path using fallback hand-painted keeper art plus name labels until dedicated NPC sprites are generated:
+  - `Han Niangzi` at the night market
+  - `Apprentice Dou` near the bureau
+  - `Stele Rubbing Du` at the stele yard
+- Added dialogue-driven day-phase transitions:
+  - Han accepts the lotus roof tile commission
+  - Du unlocks the optional consultation state
+  - Han resolves the current outcome after display
+  - Dou opens the day ledger summary
+- Updated the objective system so it now tracks the narrative route instead of only the old proof loop.
+- Expanded `ProofSmokeAutoplay` and `tools/smoke_play_proof.ps1` so the official build now auto-validates:
+  - take commission
+  - cleanup
+  - sample relic
+  - consult Du
+  - repair
+  - display
+  - resolve with Han
+  - read day summary with Dou
+- Verification evidence:
+  - Unity official Windows build succeeded.
+  - `tools/validate_asset_contract.py` passed with the same single warning on `background_open_map.png`.
+  - `tools/smoke_play_proof.ps1` passed with two consecutive launches and no missing markers.
+- Added narrative handoff docs from the parallel design/test agents:
+  - `docs/NpcDialogue_v0_5.md`
+  - `docs/NarrativeSmokeChecks.md`
+- Next gate: replace placeholder bureau furniture, add dedicated NPC/body/portrait production art, then introduce the first explicit restoration branch choice instead of the current fixed `careful_exhibit` outcome.

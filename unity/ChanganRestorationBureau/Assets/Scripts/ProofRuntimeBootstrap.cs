@@ -27,13 +27,20 @@ namespace ChanganRestorationBureau
             controller.ui = ui;
             Debug.Log("[Changan] ProofRuntimeBootstrap built UI");
 
+            var dayState = controller.GetComponent<ProofDayState>();
+            var dialogue = BuildDialogueUi(ui.transform.parent);
+
             var objective = controller.gameObject.AddComponent<ProofObjectiveState>();
             objective.objectiveText = CreateText("ObjectiveText", ui.transform, new Vector2(-420f, 295f), new Vector2(420f, 70f), 18, TextAnchor.MiddleLeft);
-            objective.objectiveText.text = "Goal: clear the grass and uncover the relic.";
             objective.hintText = CreateText("InteractionHint", ui.transform, new Vector2(0f, -270f), new Vector2(360f, 48f), 22, TextAnchor.MiddleCenter);
             objective.hintText.color = new Color32(78, 47, 28, 255);
             objective.hintText.enabled = false;
-            objective.targetArtifact = controller.artifacts.Count > 0 ? controller.artifacts[0] : null;
+            objective.targetArtifact = controller.artifacts.Find(artifact => artifact.artifactId == "artifact_roof_tile");
+            if (objective.targetArtifact == null && controller.artifacts.Count > 0)
+            {
+                objective.targetArtifact = controller.artifacts[0];
+            }
+            objective.dayState = dayState;
 
             var guide = CreateText("HintText", ui.transform, new Vector2(-250f, 320f), new Vector2(650f, 40f), 20, TextAnchor.MiddleLeft);
             guide.text = "WASD move | E interact | click or 1-6 select relics";
@@ -43,6 +50,8 @@ namespace ChanganRestorationBureau
             {
                 interaction.proofController = controller;
                 interaction.objective = objective;
+                interaction.dayState = dayState;
+                interaction.dialogue = dialogue;
             }
 
             foreach (var artifact in controller.artifacts)
@@ -84,6 +93,22 @@ namespace ChanganRestorationBureau
             ui.repairButton = CreateButton("RepairButton", panel.transform, new Vector2(-58f, -135f), new Vector2(98f, 42f), "Repair", repairButtonSprite);
             ui.displayButton = CreateButton("DisplayButton", panel.transform, new Vector2(58f, -135f), new Vector2(98f, 42f), "Display", displayButtonSprite);
             return ui;
+        }
+
+        private static ProofDialogueController BuildDialogueUi(Transform parent)
+        {
+            var panel = CreateUiRect("DialoguePanel", parent, new Vector2(0f, -235f), new Vector2(1120f, 170f), new Color32(44, 31, 26, 232));
+            panel.SetActive(false);
+            var controller = panel.AddComponent<ProofDialogueController>();
+            controller.panelRoot = panel;
+            controller.speakerText = CreateText("DialogueSpeaker", panel.transform, new Vector2(-430f, 48f), new Vector2(260f, 34f), 24, TextAnchor.MiddleLeft);
+            controller.speakerText.color = new Color32(244, 222, 170, 255);
+            controller.bodyText = CreateText("DialogueBody", panel.transform, new Vector2(0f, -2f), new Vector2(760f, 88f), 22, TextAnchor.MiddleLeft);
+            controller.footerText = CreateText("DialogueFooter", panel.transform, new Vector2(380f, 56f), new Vector2(300f, 30f), 16, TextAnchor.MiddleRight);
+            controller.footerText.color = new Color32(214, 197, 168, 255);
+            controller.portraitImage = CreateImage("DialoguePortrait", panel.transform, new Vector2(-470f, -4f), new Vector2(112f, 112f), new Color32(255, 255, 255, 210));
+            controller.portraitImage.enabled = false;
+            return controller;
         }
 
         private static void EnsureEventSystem()

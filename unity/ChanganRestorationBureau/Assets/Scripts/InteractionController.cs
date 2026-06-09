@@ -7,14 +7,41 @@ namespace ChanganRestorationBureau
         public float radius = 1.15f;
         public ProofObjectiveState objective;
         public AssetProofController proofController;
+        public ProofDialogueController dialogue;
+        public ProofDayState dayState;
 
         private InteractionTarget current;
 
         private void Update()
         {
+            if (dayState == null && proofController != null)
+            {
+                dayState = proofController.GetComponent<ProofDayState>();
+            }
+
+            if (dialogue != null && dialogue.IsOpen)
+            {
+                if (objective != null)
+                {
+                    objective.SetHint(dialogue.FooterHint);
+                }
+
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+                {
+                    dialogue.Advance();
+                }
+
+                return;
+            }
+
             current = FindNearest();
             if (objective != null)
             {
+                if (current != null && current.kind == InteractionKind.Talk && current.npc != null)
+                {
+                    current.prompt = current.npc.BuildPrompt(dayState, objective);
+                }
+
                 objective.SetHint(current != null ? current.prompt : "");
             }
 
@@ -78,6 +105,8 @@ namespace ChanganRestorationBureau
                     return objective.Sampled && !objective.Repaired;
                 case InteractionKind.Display:
                     return objective.Repaired && !objective.Displayed;
+                case InteractionKind.Talk:
+                    return target.npc != null && target.npc.CanInteract(dayState, objective);
                 default:
                     return false;
             }
@@ -107,6 +136,9 @@ namespace ChanganRestorationBureau
                     proofController.SelectArtifactFromInteraction(objective.targetArtifact);
                     proofController.DisplaySelected();
                     objective.MarkDisplayed();
+                    break;
+                case InteractionKind.Talk:
+                    target.npc.BeginInteraction(dayState, objective, dialogue);
                     break;
             }
         }
