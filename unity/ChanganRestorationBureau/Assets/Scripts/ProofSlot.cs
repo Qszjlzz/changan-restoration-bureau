@@ -39,6 +39,7 @@ namespace ChanganRestorationBureau
             artifact.transform.position = transform.position;
             artifact.transform.SetParent(transform, true);
             artifact.MarkDisplayed(slotType == ProofSlotType.DisplayCaseSlot);
+            Debug.Log($"[Changan] Slot placed artifact={artifact.artifactId} slot={slotId} type={slotType}");
             return true;
         }
     }

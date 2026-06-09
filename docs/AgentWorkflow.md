@@ -74,8 +74,8 @@ Next Return Target:
 
 The official gameplay executable now reaches runtime and loads the playable proof scene after the interaction-target serialization fix. The next accepted change must:
 
-1. pass a second clean launch and smoke-play check,
-2. reintroduce the bureau / market / stele / relic-yard landmarks into the stable official proof path,
-3. start the `v0.5` commission slice from `docs/TaskSlice_v0_5_LotusTile.md`.
+1. keep passing the two-launch smoke-play check through `tools/smoke_play_proof.ps1`,
+2. replace remaining placeholder furniture and other obviously non-final world props in the official proof path,
+3. start the `v0.5` commission slice from `docs/TaskSlice_v0_5_LotusTile.md` by adding the first NPC anchors, dialogue entry points, and day-phase transitions.
 
 New NPCs, dialogue, and economy work should ship only through that stable executable path, with Player Test using `docs/PlayerTestReportTemplate.md` and Art using `docs/ArtGapAudit_v0_5.md` as the handoff contract.

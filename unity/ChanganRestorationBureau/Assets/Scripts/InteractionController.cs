@@ -13,12 +13,28 @@ namespace ChanganRestorationBureau
         private void Update()
         {
             current = FindNearest();
-            objective.SetHint(current != null ? current.prompt : "");
+            if (objective != null)
+            {
+                objective.SetHint(current != null ? current.prompt : "");
+            }
 
             if (current != null && Input.GetKeyDown(KeyCode.E))
             {
                 Interact(current);
             }
+        }
+
+        public bool TryInteractNearest()
+        {
+            current = FindNearest();
+            if (current == null)
+            {
+                Debug.LogWarning("[Changan] TryInteractNearest found no valid target.");
+                return false;
+            }
+
+            Interact(current);
+            return true;
         }
 
         private InteractionTarget FindNearest()
@@ -47,6 +63,11 @@ namespace ChanganRestorationBureau
 
         private bool IsAvailable(InteractionTarget target)
         {
+            if (objective == null)
+            {
+                return false;
+            }
+
             switch (target.kind)
             {
                 case InteractionKind.Cleanup:
@@ -64,6 +85,7 @@ namespace ChanganRestorationBureau
 
         private void Interact(InteractionTarget target)
         {
+            Debug.Log($"[Changan] Interact kind={target.kind} target={target.name}");
             switch (target.kind)
             {
                 case InteractionKind.Cleanup:

@@ -49,6 +49,7 @@ namespace ChanganRestorationBureau
                 return;
             }
 
+            Debug.Log($"[Changan] RepairSelected artifact={selected.artifactId}");
             selected.Repair();
             if (workbenchSlot != null && !selected.IsDisplayed)
             {
@@ -65,6 +66,7 @@ namespace ChanganRestorationBureau
                 return;
             }
 
+            Debug.Log($"[Changan] DisplaySelected artifact={selected.artifactId}");
             foreach (var slot in displaySlots)
             {
                 if (slot.TryPlace(selected))
@@ -110,6 +112,7 @@ namespace ChanganRestorationBureau
                 selected.SetSelected(true);
             }
 
+            Debug.Log($"[Changan] SelectArtifact artifact={(selected != null ? selected.artifactId : "none")}");
             ui.ShowSelection(selected);
         }
     }

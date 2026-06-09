@@ -37,6 +37,7 @@ namespace ChanganRestorationBureau
         public void MarkCleared()
         {
             Cleared = true;
+            Debug.Log("[Changan] Objective marked cleared");
             if (targetArtifact != null)
             {
                 targetArtifact.gameObject.SetActive(true);
@@ -49,18 +50,21 @@ namespace ChanganRestorationBureau
         {
             Sampled = true;
             targetArtifact = artifact;
+            Debug.Log($"[Changan] Objective marked sampled artifact={(artifact != null ? artifact.artifactId : "none")}");
             Refresh();
         }
 
         public void MarkRepaired()
         {
             Repaired = true;
+            Debug.Log("[Changan] Objective marked repaired");
             Refresh();
         }
 
         public void MarkDisplayed()
         {
             Displayed = true;
+            Debug.Log("[Changan] Objective marked displayed");
             Refresh();
         }
 

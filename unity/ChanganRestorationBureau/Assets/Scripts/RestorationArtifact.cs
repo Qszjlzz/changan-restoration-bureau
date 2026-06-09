@@ -35,12 +35,14 @@ namespace ChanganRestorationBureau
         public void Repair()
         {
             IsRepaired = true;
+            Debug.Log($"[Changan] Artifact repaired id={artifactId}");
             ApplyState();
         }
 
         public void MarkDisplayed(bool displayed)
         {
             IsDisplayed = displayed;
+            Debug.Log($"[Changan] Artifact display state id={artifactId} displayed={displayed}");
             ApplyState();
         }
 

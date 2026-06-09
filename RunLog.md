@@ -84,3 +84,17 @@
   - `docs/ArtGapAudit_v0_5.md`
   - `docs/PlayerTestReportTemplate.md`
 - Next gate: second clean launch plus smoke-play through `move -> cleanup -> sample -> repair -> display`, then begin landmark reintegration and the first NPC commission slice.
+
+## 2026-06-10 Playable Proof Stabilization Pass 2
+
+- Reintroduced the four open-map landmarks into the stable `PlayableProofScene` path:
+  - `landmark_bureau`
+  - `landmark_market`
+  - `landmark_stele_yard`
+  - `landmark_relic_yard`
+- Added richer gameplay trace logs for cleanup, selection, repair, display, slot placement, and objective progression to support the Player Test Agent.
+- Added `tools/smoke_play_proof.ps1` and the in-game `ProofSmokeAutoplay` helper. The official executable can now run a built-in smoke route with `-smoke-play`, instead of relying on brittle desktop key injection.
+- Smoke evidence: the official gameplay executable launched twice and completed the full proof route twice through the automated smoke path with no crash markers and no missing progression markers.
+- Added `ProofDayState` plus `Assets/Resources/Data/ProofNarrativeCatalog.json` as the first in-engine data skeleton for the v0.5 commission slice `The Lotus Roof Tile Of The Night Market`.
+- Asset QA still passes with the same one non-blocking warning: `background_open_map.png` remains `3072x1728` instead of the written `3072x1792` spec.
+- Next gate: replace placeholder workbench/display visuals, add world anchors and first interactions for `Han Niangzi`, `Apprentice Dou`, and `Stele Rubbing Du`, then wire the first commission acceptance and day-phase transitions onto the new `ProofDayState`.

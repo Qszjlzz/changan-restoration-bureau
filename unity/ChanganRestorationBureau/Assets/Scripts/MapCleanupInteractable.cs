@@ -5,7 +5,7 @@ namespace ChanganRestorationBureau
     [RequireComponent(typeof(Collider2D))]
     public sealed class MapCleanupInteractable : MonoBehaviour
     {
-        public string displayName = "可清理荒草";
+        public string displayName = "Clearable obstacle";
         public Sprite clearedSprite;
         public bool IsCleared { get; private set; }
 
@@ -31,6 +31,7 @@ namespace ChanganRestorationBureau
             }
 
             IsCleared = true;
+            Debug.Log($"[Changan] Cleanup cleared obstacle={name}");
             if (spriteRenderer != null)
             {
                 if (clearedSprite != null)

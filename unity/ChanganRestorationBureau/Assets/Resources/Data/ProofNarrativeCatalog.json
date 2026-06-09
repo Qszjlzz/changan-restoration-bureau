@@ -1,0 +1,57 @@
+{
+  "npcs": [
+    {
+      "npcId": "han_niangzi",
+      "displayName": "Han Niangzi",
+      "role": "commissioner",
+      "homeLandmarkId": "landmark_market",
+      "idleAssetId": "npc_han_niangzi_idle",
+      "portraitAssetId": "portrait_han_niangzi"
+    },
+    {
+      "npcId": "apprentice_dou",
+      "displayName": "Apprentice Dou",
+      "role": "guide",
+      "homeLandmarkId": "landmark_bureau",
+      "idleAssetId": "npc_apprentice_dou_idle",
+      "portraitAssetId": "portrait_apprentice_dou"
+    },
+    {
+      "npcId": "stele_du",
+      "displayName": "Stele Rubbing Du",
+      "role": "consultant",
+      "homeLandmarkId": "landmark_stele_yard",
+      "idleAssetId": "npc_stele_du_idle",
+      "portraitAssetId": "portrait_stele_du"
+    }
+  ],
+  "commissions": [
+    {
+      "commissionId": "lotus_roof_tile_night_market",
+      "title": "The Lotus Roof Tile Of The Night Market",
+      "artifactId": "artifact_lotus_tile_damaged",
+      "commissionerNpcId": "han_niangzi",
+      "guideNpcId": "apprentice_dou",
+      "consultantNpcId": "stele_du",
+      "storyBeats": [
+        "Talk to Han Niangzi at the night market.",
+        "Investigate the lotus roof tile fragment near the relic yard.",
+        "Optionally consult Stele Rubbing Du about the market fire and later reuse.",
+        "Return to the bureau and choose quick reuse or careful exhibition restoration.",
+        "Resolve the day through return or display, then read the summary."
+      ],
+      "quickReuseReward": {
+        "coins": 12,
+        "neighborhoodTrust": 2,
+        "scholarlyReputation": 0,
+        "workHours": 0
+      },
+      "carefulExhibitReward": {
+        "coins": 8,
+        "neighborhoodTrust": 0,
+        "scholarlyReputation": 2,
+        "workHours": 0
+      }
+    }
+  ]
+}

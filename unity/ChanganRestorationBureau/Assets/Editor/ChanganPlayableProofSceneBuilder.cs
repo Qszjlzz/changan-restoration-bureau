@@ -31,6 +31,7 @@ public static class ChanganPlayableProofSceneBuilder
 
         var camera = CreateCamera();
         CreateBackground();
+        CreateLandmarks();
         CreateFurniture();
         CreateForegrounds();
         var player = CreatePlayer();
@@ -38,6 +39,8 @@ public static class ChanganPlayableProofSceneBuilder
 
         var controller = new GameObject("PlayableProofController").AddComponent<AssetProofController>();
         controller.worldCamera = camera;
+        var dayState = controller.gameObject.AddComponent<ProofDayState>();
+        dayState.activeCommissionId = "lotus_roof_tile_night_market";
         controller.workbenchSlot = CreateSlot("WorkbenchSlot", ProofSlotType.WorkbenchSlot, new Vector2(-4.15f, 1.25f), new Vector2(3f, 1f));
         controller.displaySlots.Add(CreateSlot("DisplaySlot_01", ProofSlotType.DisplayCaseSlot, new Vector2(-2.9f, 1.35f), Vector2.one));
         controller.displaySlots.Add(CreateSlot("DisplaySlot_02", ProofSlotType.DisplayCaseSlot, new Vector2(-2.05f, 1.35f), Vector2.one));
@@ -58,6 +61,11 @@ public static class ChanganPlayableProofSceneBuilder
                 target.artifact = artifact;
             }
         }
+
+        var smokeAutoplay = controller.gameObject.AddComponent<ProofSmokeAutoplay>();
+        smokeAutoplay.controller = controller;
+        smokeAutoplay.interaction = interaction;
+        smokeAutoplay.player = player.transform;
 
         var bootstrap = controller.gameObject.AddComponent<ProofRuntimeBootstrap>();
         bootstrap.player = player;
@@ -95,6 +103,14 @@ public static class ChanganPlayableProofSceneBuilder
         renderer.sprite = LoadRequiredProductionSprite("background_open_map", SpritePivot.Center);
         renderer.sortingOrder = -100;
         obj.transform.localScale = new Vector3(0.78f, 0.78f, 1f);
+    }
+
+    private static void CreateLandmarks()
+    {
+        CreateLandmark("Landmark_ChanganRestorationBureau", "landmark_bureau", new Vector2(-3.25f, 1.6f), 4, 0.55f);
+        CreateLandmark("Landmark_SteleYard", "landmark_stele_yard", new Vector2(4.35f, 2.35f), 3, 0.48f);
+        CreateLandmark("Landmark_NightMarket", "landmark_market", new Vector2(-3.5f, -2.35f), 3, 0.48f);
+        CreateLandmark("Landmark_RelicYard", "landmark_relic_yard", new Vector2(4.35f, -1.8f), 3, 0.48f);
     }
 
     private static void CreateFurniture()
@@ -210,6 +226,17 @@ public static class ChanganPlayableProofSceneBuilder
         target.kind = InteractionKind.Cleanup;
         target.prompt = prompt;
         target.cleanup = cleanup;
+    }
+
+    private static GameObject CreateLandmark(string name, string spriteName, Vector2 position, int order, float scale)
+    {
+        var obj = new GameObject(name);
+        obj.transform.position = position;
+        obj.transform.localScale = Vector3.one * scale;
+        var renderer = obj.AddComponent<SpriteRenderer>();
+        renderer.sprite = LoadRequiredProductionSprite(spriteName, SpritePivot.BottomCenter);
+        renderer.sortingOrder = order;
+        return obj;
     }
 
     private static GameObject CreateProp(string name, Sprite sprite, Vector2 position, float scale, int order)
