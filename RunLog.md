@@ -57,3 +57,12 @@
 - Built and launched `Build/ChanganVisualPreview/ChanganVisualPreview.exe`, then copied and launched it from `C:\ChanganVisualPreview\ChanganVisualPreview.exe` for path-safe viewing.
 - Runtime evidence: `ChanganVisualPreview` stayed open with a valid window handle and no repeat of the `level0 corrupted` error in `Player.log`.
 - Next fix: isolate which object or UI serialization in `AssetProofScene` corrupts the full playable build, then merge the preview stability back into the official proof executable.
+
+## 2026-06-10 Multi-Agent Workflow Gate
+
+- Added a production workflow that separates Game Design, 2D Art, Unity Implementation, Player Test, and Orchestrator responsibilities.
+- Added task cards for each agent and a repeatable player test script covering launch, camera, boundaries, occlusion, UI, current gameplay flow, and the planned v0.5 day loop.
+- Added `DesignRoadmap.md` with the next product target: first fix the official gameplay executable, then build v0.5 around `The Lotus Roof Tile Of The Night Market`.
+- Added `tools/validate_asset_contract.py` to compare production PNGs against Unity copies, expected dimensions, and PPU metadata.
+- Asset QA result: passed with one non-blocking warning. `background_open_map.png` is `3072x1728`, while the spec expects `3072x1792`; this should be resolved by the Art Agent before final v0.5 art lock.
+- Player Test gate remains blocked for official gameplay release until the `AssetProofScene` / `level0 corrupted` P0 is fixed.

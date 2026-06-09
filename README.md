@@ -73,3 +73,14 @@ The proof succeeds when replacement art can use the same filenames/specs and sti
 - artifact colliders
 - detail panel icon slot
 - repair/display state UI
+
+## Multi-Agent Workflow
+
+The project now uses a dedicated production loop:
+
+- `docs/AgentWorkflow.md`: role handoffs and release gates.
+- `docs/AgentTaskCards.md`: task format for design, art, Unity, and player-test agents.
+- `docs/PlayerTestScript.md`: repeatable smoke and gameplay test scripts.
+- `tools/validate_asset_contract.py`: production-art and Unity-copy contract checker.
+
+Current product target: first fix the official gameplay executable, then build `v0.5` as one complete day around `The Lotus Roof Tile Of The Night Market`.
