@@ -15,6 +15,13 @@ namespace ChanganRestorationBureau
 
         private void Start()
         {
+            Debug.Log($"[Changan] AssetProofController.Start artifacts={artifacts.Count} displays={displaySlots.Count} workbench={(workbenchSlot != null)} ui={(ui != null)}");
+            if (ui == null)
+            {
+                Debug.LogError("[Changan] Proof UI is missing on AssetProofController.Start.");
+                return;
+            }
+
             ui.Bind(this);
             SelectArtifact(artifacts.Count > 0 ? artifacts[0] : null);
         }

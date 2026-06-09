@@ -8,17 +8,17 @@ public static class ChanganProofSceneValidator
 {
     public static void ValidateProofScene()
     {
-        if (!System.IO.File.Exists("Assets/Scenes/AssetProofScene.unity"))
+        if (!System.IO.File.Exists(ChanganPlayableProofSceneBuilder.ScenePath))
         {
-            ChanganProofSceneBuilder.BuildAssetProofScene();
+            ChanganPlayableProofSceneBuilder.BuildScene();
         }
 
-        EditorSceneManager.OpenScene("Assets/Scenes/AssetProofScene.unity");
+        EditorSceneManager.OpenScene(ChanganPlayableProofSceneBuilder.ScenePath);
 
         var artifacts = Object.FindObjectsOfType<RestorationArtifact>();
         var slots = Object.FindObjectsOfType<ProofSlot>();
         var controller = Object.FindObjectOfType<AssetProofController>();
-        var ui = Object.FindObjectOfType<ProofUIController>();
+        var bootstrap = Object.FindObjectOfType<ProofRuntimeBootstrap>();
 
         if (artifacts.Length != 6)
         {
@@ -30,9 +30,9 @@ public static class ChanganProofSceneValidator
             throw new System.Exception("Expected exactly 3 display slots.");
         }
 
-        if (controller == null || ui == null)
+        if (controller == null || bootstrap == null)
         {
-            throw new System.Exception("Proof controller or UI controller is missing.");
+            throw new System.Exception("Proof controller or runtime bootstrap is missing.");
         }
 
         foreach (var artifact in artifacts)

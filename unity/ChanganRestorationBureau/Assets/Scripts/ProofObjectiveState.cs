@@ -16,10 +16,12 @@ namespace ChanganRestorationBureau
 
         private void Start()
         {
+            Debug.Log($"[Changan] ProofObjectiveState.Start target={(targetArtifact != null ? targetArtifact.artifactId : "none")}");
             if (targetArtifact != null)
             {
                 targetArtifact.gameObject.SetActive(false);
             }
+
             Refresh();
         }
 
@@ -39,6 +41,7 @@ namespace ChanganRestorationBureau
             {
                 targetArtifact.gameObject.SetActive(true);
             }
+
             Refresh();
         }
 
@@ -68,25 +71,25 @@ namespace ChanganRestorationBureau
                 return;
             }
 
-            var step = "清理荒草，寻找待修物";
+            var step = "Clear the grass and find the relic";
             if (Displayed)
             {
-                step = "已完成：文物修复并陈列";
+                step = "Completed: relic repaired and displayed";
             }
             else if (Repaired)
             {
-                step = "带到展柜陈列";
+                step = "Bring the relic to the display case";
             }
             else if (Sampled)
             {
-                step = "回修物局修复";
+                step = "Return to the bureau and repair the relic";
             }
             else if (Cleared)
             {
-                step = "采样露出的文物";
+                step = "Sample the uncovered relic";
             }
 
-            objectiveText.text = $"目标：{step}\n发现：{(Sampled ? 1 : 0)}/1　陈列：{(Displayed ? 1 : 0)}/1";
+            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1";
         }
     }
 }

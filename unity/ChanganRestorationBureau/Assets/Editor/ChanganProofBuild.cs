@@ -6,12 +6,12 @@ using UnityEngine;
 
 public static class ChanganProofBuild
 {
-    private const string ScenePath = "Assets/Scenes/AssetProofScene.unity";
+    private const string ScenePath = ChanganPlayableProofSceneBuilder.ScenePath;
     private const string BuildFolder = "../../../Build/ChanganRestorationBureau";
 
     public static void BuildWindowsProof()
     {
-        ChanganProofSceneBuilder.BuildAssetProofScene();
+        ChanganPlayableProofSceneBuilder.BuildScene();
         ChanganProofSceneValidator.ValidateProofScene();
         EditorSceneManager.OpenScene(ScenePath);
 

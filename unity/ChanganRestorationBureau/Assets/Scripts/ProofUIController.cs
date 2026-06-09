@@ -28,9 +28,9 @@ namespace ChanganRestorationBureau
             selected = artifact;
             var hasSelection = selected != null;
 
-            titleText.text = hasSelection ? selected.displayName : "选择一件待修物";
-            eraText.text = hasSelection ? selected.eraTag : "点击铺内 6 件文物，检查比例、pivot 与 UI 插槽。";
-            stateText.text = hasSelection ? BuildState(selected) : "未选择";
+            titleText.text = hasSelection ? selected.displayName : "Select a relic to restore";
+            eraText.text = hasSelection ? selected.eraTag : "Inspect relic scale, pivot, and UI fit.";
+            stateText.text = hasSelection ? BuildState(selected) : "Nothing selected";
             iconImage.enabled = hasSelection;
             iconImage.sprite = hasSelection ? selected.GetComponent<SpriteRenderer>().sprite : null;
             repairButton.interactable = hasSelection && !selected.IsRepaired;
@@ -41,10 +41,10 @@ namespace ChanganRestorationBureau
         {
             if (artifact.IsDisplayed)
             {
-                return "已陈列";
+                return "Displayed";
             }
 
-            return artifact.IsRepaired ? "已修复，可陈列" : "残缺，等待修复";
+            return artifact.IsRepaired ? "Repaired and ready to display" : "Damaged and waiting for repair";
         }
     }
 }
