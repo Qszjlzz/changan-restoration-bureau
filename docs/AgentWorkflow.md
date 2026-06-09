@@ -72,4 +72,10 @@ Next Return Target:
 
 ## Current Priority
 
-The next accepted change must address the `AssetProofScene` P0 runtime crash or replace the preview/proof split with a single stable playable executable. New NPCs, economy, and dialogue should not be treated as shippable until the official gameplay build launches.
+The official gameplay executable now reaches runtime and loads the playable proof scene after the interaction-target serialization fix. The next accepted change must:
+
+1. pass a second clean launch and smoke-play check,
+2. reintroduce the bureau / market / stele / relic-yard landmarks into the stable official proof path,
+3. start the `v0.5` commission slice from `docs/TaskSlice_v0_5_LotusTile.md`.
+
+New NPCs, dialogue, and economy work should ship only through that stable executable path, with Player Test using `docs/PlayerTestReportTemplate.md` and Art using `docs/ArtGapAudit_v0_5.md` as the handoff contract.

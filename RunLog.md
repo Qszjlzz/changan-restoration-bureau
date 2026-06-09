@@ -66,3 +66,21 @@
 - Added `tools/validate_asset_contract.py` to compare production PNGs against Unity copies, expected dimensions, and PPU metadata.
 - Asset QA result: passed with one non-blocking warning. `background_open_map.png` is `3072x1728`, while the spec expects `3072x1792`; this should be resolved by the Art Agent before final v0.5 art lock.
 - Player Test gate remains blocked for official gameplay release until the `AssetProofScene` / `level0 corrupted` P0 is fixed.
+
+## 2026-06-10 Official Build Launch Recovery
+
+- Replaced the official proof build path so it now builds `PlayableProofScene.unity` through `ChanganPlayableProofSceneBuilder` and boots runtime UI through `ProofRuntimeBootstrap`.
+- Split `InteractionTarget` into its own script file so the generated scene now serializes interaction targets with normal GUID-backed script references instead of local file-only references.
+- Rebuilt the official Windows executable and mirrored it to an ASCII-safe temp launch path for verification.
+- Latest launch evidence: the executable stayed alive for at least 12 seconds with a real window handle, and `Player.log` advanced into managed runtime logs:
+  - `[Changan] ProofRuntimeBootstrap.Awake begin`
+  - `[Changan] ProofRuntimeBootstrap built UI`
+  - `[Changan] ProofRuntimeBootstrap.Awake complete`
+  - `[Changan] ProofObjectiveState.Start target=artifact_terracotta_fragment`
+  - `[Changan] AssetProofController.Start artifacts=6 displays=3 workbench=True ui=True`
+- The previous `level0 corrupted` / `Position out of bounds` crash did not appear after this fix pass.
+- Added multi-agent handoff docs for the next slice:
+  - `docs/TaskSlice_v0_5_LotusTile.md`
+  - `docs/ArtGapAudit_v0_5.md`
+  - `docs/PlayerTestReportTemplate.md`
+- Next gate: second clean launch plus smoke-play through `move -> cleanup -> sample -> repair -> display`, then begin landmark reintegration and the first NPC commission slice.
