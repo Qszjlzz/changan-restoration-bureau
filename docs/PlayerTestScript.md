@@ -37,11 +37,12 @@ Fail on any P0/P1 issue.
 5. Optionally consult `Stele Rubbing Du`.
 6. Spend limited work hours on restoration operations.
 7. At the workbench, predict each branch's cost and reward from the UI alone.
-8. Run one fresh playthrough with `quick_reuse`.
-9. Run one fresh playthrough with `careful_exhibit`.
-10. Compare the objective copy, Han response, and reward changes between the two runs.
-11. Reach the day summary and restate what changed plus what tomorrow is teasing.
-12. Record any stretch longer than 20 seconds with no new decision, reveal, or feedback.
+8. Confirm the day-budget HUD shows hours, paste, and stone before choosing.
+9. Run one fresh playthrough with `quick_reuse`.
+10. Run one fresh playthrough with `careful_exhibit`.
+11. Compare the objective copy, Han response, and reward changes between the two runs.
+12. Reach the day summary and restate what changed plus what tomorrow is teasing.
+13. Record any stretch longer than 20 seconds with no new decision, reveal, or feedback.
 
 ## Test Verdict
 

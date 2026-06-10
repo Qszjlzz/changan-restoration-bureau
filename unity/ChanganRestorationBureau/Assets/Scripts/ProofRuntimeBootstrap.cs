@@ -42,10 +42,13 @@ namespace ChanganRestorationBureau
             }
             objective.dayState = dayState;
             var restorationChoice = BuildRestorationChoiceUi(ui.transform.parent);
+            var resourceHud = BuildResourceHud(ui.transform.parent);
+            resourceHud.Bind(dayState);
+            restorationChoice.resourceHud = resourceHud;
             restorationChoice.Bind(controller, dayState, objective);
 
             var guide = CreateText("HintText", ui.transform, new Vector2(-250f, 320f), new Vector2(650f, 40f), 20, TextAnchor.MiddleLeft);
-            guide.text = "WASD move | E interact | click or 1-6 select relics";
+            guide.text = "WASD move | E interact";
 
             var interaction = player != null ? player.GetComponent<InteractionController>() : null;
             if (interaction != null)
@@ -55,6 +58,7 @@ namespace ChanganRestorationBureau
                 interaction.dayState = dayState;
                 interaction.dialogue = dialogue;
                 interaction.restorationChoice = restorationChoice;
+                interaction.resourceHud = resourceHud;
             }
 
             foreach (var artifact in controller.artifacts)
@@ -118,6 +122,16 @@ namespace ChanganRestorationBureau
             controller.footerText.color = new Color32(214, 197, 168, 255);
             controller.portraitImage = CreateImage("DialoguePortrait", panel.transform, new Vector2(-470f, -4f), new Vector2(112f, 112f), new Color32(255, 255, 255, 210));
             controller.portraitImage.enabled = false;
+            return controller;
+        }
+
+        private static ProofResourceHudController BuildResourceHud(Transform parent)
+        {
+            var panel = CreateUiRect("ResourceHudPanel", parent, new Vector2(385f, 260f), new Vector2(310f, 132f), new Color32(243, 232, 209, 220));
+            var controller = panel.AddComponent<ProofResourceHudController>();
+            controller.budgetText = CreateText("BudgetText", panel.transform, new Vector2(0f, 18f), new Vector2(270f, 88f), 15, TextAnchor.MiddleLeft);
+            controller.feedbackText = CreateText("BudgetFeedback", panel.transform, new Vector2(0f, -44f), new Vector2(270f, 30f), 14, TextAnchor.MiddleLeft);
+            controller.feedbackText.enabled = false;
             return controller;
         }
 

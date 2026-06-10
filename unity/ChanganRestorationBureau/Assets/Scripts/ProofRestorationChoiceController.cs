@@ -14,6 +14,7 @@ namespace ChanganRestorationBureau
         public Text carefulLabelText;
         public Button quickReuseButton;
         public Button carefulExhibitButton;
+        public ProofResourceHudController resourceHud;
 
         public bool IsOpen => panelRoot != null && panelRoot.activeSelf;
         public string FooterHint => IsOpen ? "Press 1 for quick reuse, 2 for careful exhibit" : string.Empty;
@@ -91,9 +92,19 @@ namespace ChanganRestorationBureau
             Debug.Log($"[Changan] Restoration choice attempted branch={branch} success={success}");
             if (!success)
             {
+                if (dayState != null)
+                {
+                    resourceHud?.ShowActionFeedback(dayState.GetBranchBlockedReason(branch), true);
+                }
+
                 Refresh();
                 return false;
             }
+
+            resourceHud?.ShowActionFeedback(
+                branch == RestorationBranch.QuickReuse
+                    ? "Quick reuse chosen: -1 hour, -1 paste."
+                    : "Careful exhibit chosen: -1 hour, -1 stone powder.");
 
             if (objective != null)
             {

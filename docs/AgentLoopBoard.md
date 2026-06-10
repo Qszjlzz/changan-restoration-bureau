@@ -6,7 +6,7 @@ Ship `v0.5` as one stable, replayable in-game day for `The Lotus Roof Tile Of Th
 
 ## Current Player-Test Problem
 
-The playable is stable enough to launch and finish, but it still feels more like a guided proof than a real management day. The biggest missing player-facing ingredient is a visible restoration decision that changes route, rewards, and NPC response.
+The official build now has a visible restoration decision and a visible day budget, but the bureau still breaks immersion in the first minute because the workbench/display are placeholder props, story NPCs still fall back to keeper-like visuals, and the lotus-tile commission still lacks hero-specific production art.
 
 ## Current Approved Slice
 
@@ -19,6 +19,7 @@ The playable is stable enough to launch and finish, but it still feels more like
   - careful exhibit still requires the display case
   - branch choice changes summary text and rewards
   - official build still passes the two-launch smoke gate
+- Status: verified in the current official build
 
 ### Slice B: Visible Day Budget
 
@@ -28,6 +29,17 @@ The playable is stable enough to launch and finish, but it still feels more like
   - consultation and restoration costs are visible before the player commits
   - blocked actions explain why they are blocked
   - players can explain the tradeoff they made after one run
+- Status: verified in the current official build
+
+### Slice C: Bureau And NPC Art Replacement
+
+- Owner: 2D Art + Unity Implementation
+- Goal: replace the most immersion-breaking placeholders without shifting established slots or map composition
+- Acceptance:
+  - workbench and display case use production art instead of generated placeholder blocks
+  - Han Niangzi, Apprentice Dou, and Stele Rubbing Du use dedicated production body art
+  - lotus-tile commission art is prepared for hero-specific damaged / quick-fix / conserved replacement
+  - official build plus both smoke branches still pass after import
 
 ## Agent Assignments
 
@@ -65,7 +77,8 @@ Placement invariants:
 Current responsibilities:
 
 - keep the official playable build as the only truth path
-- wire restoration branch choice into interaction, UI, dialogue, and summary
+- preserve the verified branch-choice loop and visible day-budget HUD
+- prepare builder/import mapping so production furniture and NPC art can drop in without slot drift
 - preserve map edge clamp, camera clamp, y-sort, and occlusion behavior
 
 ### Player Test Agent
@@ -74,6 +87,7 @@ Current must-check items:
 
 - two consecutive official launches
 - branch choice readability
+- day-budget HUD readability and cost clarity
 - quick reuse route without display-case dependency
 - careful exhibit route with display-case dependency
 - objective text, dialogue hints, and summary clarity
@@ -87,7 +101,7 @@ Current must-check items:
 
 ## Next Queue After Current Slice
 
-1. visible day budget HUD
+1. production workbench and display case replacement
 2. dedicated NPC production art
-3. production workbench and display case replacement
-4. one extra optional narrative beat or ambient NPC reaction after outcome resolution
+3. lotus-tile-specific hero artifact art and asset-id cleanup
+4. stronger day-summary payoff and one extra post-outcome narrative beat

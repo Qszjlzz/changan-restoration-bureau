@@ -62,6 +62,13 @@ namespace ChanganRestorationBureau
                 case "apprentice_dou":
                     return dayState != null && dayState.OutcomeResolved && !dayState.DaySummaryShown ? "Press E to read the day ledger" : "Press E to talk to Apprentice Dou";
                 case "stele_du":
+                    if (dayState != null && !dayState.HasConsultedSteleDu)
+                    {
+                        return dayState.CanConsultSteleDu()
+                            ? "Press E to consult Stele Rubbing Du (-1 hour)"
+                            : "Press E to speak to Du. The day is out of work hours.";
+                    }
+
                     return "Press E to consult Stele Rubbing Du";
                 default:
                     return "Press E to talk";
@@ -326,6 +333,7 @@ namespace ChanganRestorationBureau
                     portrait = portraitSprite,
                     lines = new[]
                     {
+                        "This will cost an hour of bench time, so listen closely.",
                         "The soot line is wrong for simple weathering.",
                         "This tile was scorched, then set back into use later. Someone chose survival over symmetry.",
                         "If you restore it, decide whether you are preserving a roof tile or a neighborhood memory."

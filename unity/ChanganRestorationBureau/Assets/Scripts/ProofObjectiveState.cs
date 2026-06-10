@@ -108,11 +108,12 @@ namespace ChanganRestorationBureau
             }
 
             var step = BuildStepText();
-            var phase = dayState != null ? dayState.currentPhase.ToString() : "Proof";
             var branch = dayState != null && dayState.SelectedRestorationBranch != RestorationBranch.None
-                ? dayState.SelectedRestorationBranch.ToString()
+                ? dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse
+                    ? "Quick Reuse"
+                    : "Careful Exhibit"
                 : "Pending";
-            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1  Branch: {branch}  Phase: {phase}";
+            objectiveText.text = $"Goal: {step}\nRoute: {branch}";
         }
 
         private string BuildStepText()

@@ -9,6 +9,7 @@ namespace ChanganRestorationBureau
         public AssetProofController proofController;
         public ProofDialogueController dialogue;
         public ProofRestorationChoiceController restorationChoice;
+        public ProofResourceHudController resourceHud;
         public ProofDayState dayState;
 
         private InteractionTarget current;
@@ -49,9 +50,22 @@ namespace ChanganRestorationBureau
             current = FindNearest();
             if (objective != null)
             {
-                if (current != null && current.kind == InteractionKind.Talk && current.npc != null)
+                if (current != null)
                 {
-                    current.prompt = current.npc.BuildPrompt(dayState, objective);
+                    if (current.kind == InteractionKind.Talk && current.npc != null)
+                    {
+                        current.prompt = current.npc.BuildPrompt(dayState, objective);
+                    }
+                    else if (current.kind == InteractionKind.Repair)
+                    {
+                        current.prompt = dayState != null && dayState.WorkHours > 0
+                            ? "Press E to choose a restoration path (-1 hour and material)"
+                            : "Press E to inspect restoration costs. No work hours remain.";
+                    }
+                    else if (current.kind == InteractionKind.Display)
+                    {
+                        current.prompt = "Press E to place the conserved tile on display";
+                    }
                 }
 
                 objective.SetHint(current != null ? current.prompt : "");
@@ -134,12 +148,14 @@ namespace ChanganRestorationBureau
                 case InteractionKind.Cleanup:
                     target.cleanup.Clear();
                     objective.MarkCleared();
+                    resourceHud?.ShowActionFeedback("Overgrowth cleared. The buried tile is visible.");
                     break;
                 case InteractionKind.Sample:
                     proofController.SelectArtifactFromInteraction(target.artifact);
                     target.artifact.transform.SetParent(transform, true);
                     target.artifact.transform.localPosition = new Vector3(0.32f, 0.25f, 0f);
                     objective.MarkSampled(target.artifact);
+                    resourceHud?.ShowActionFeedback("Lotus tile sampled. Return to the bureau bench.");
                     break;
                 case InteractionKind.Repair:
                     proofController.SelectArtifactFromInteraction(objective.targetArtifact);
@@ -149,6 +165,7 @@ namespace ChanganRestorationBureau
                     proofController.SelectArtifactFromInteraction(objective.targetArtifact);
                     proofController.DisplaySelected();
                     objective.MarkDisplayed();
+                    resourceHud?.ShowActionFeedback("Conserved tile placed in the display case.");
                     break;
                 case InteractionKind.Talk:
                     target.npc.BeginInteraction(dayState, objective, dialogue);

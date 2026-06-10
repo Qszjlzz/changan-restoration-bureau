@@ -164,6 +164,65 @@ namespace ChanganRestorationBureau
             }
         }
 
+        public bool CanConsultSteleDu()
+        {
+            return WorkHours > 0;
+        }
+
+        public string GetBranchBlockedReason(RestorationBranch branch)
+        {
+            switch (branch)
+            {
+                case RestorationBranch.QuickReuse:
+                    if (WorkHours <= 0 && Paste <= 0)
+                    {
+                        return "Quick reuse needs 1 work hour and 1 paste.";
+                    }
+
+                    if (WorkHours <= 0)
+                    {
+                        return "Quick reuse needs 1 more work hour.";
+                    }
+
+                    if (Paste <= 0)
+                    {
+                        return "Quick reuse needs 1 paste.";
+                    }
+
+                    return "Quick reuse is ready.";
+                case RestorationBranch.CarefulExhibit:
+                    if (WorkHours <= 0 && StonePowder <= 0)
+                    {
+                        return "Careful exhibit needs 1 work hour and 1 stone powder.";
+                    }
+
+                    if (WorkHours <= 0)
+                    {
+                        return "Careful exhibit needs 1 more work hour.";
+                    }
+
+                    if (StonePowder <= 0)
+                    {
+                        return "Careful exhibit needs 1 stone powder.";
+                    }
+
+                    return "Careful exhibit is ready.";
+                default:
+                    return "Choose a restoration route.";
+            }
+        }
+
+        public string BuildBudgetHudText()
+        {
+            var routeLabel = SelectedRestorationBranch == RestorationBranch.None
+                ? "Unchosen"
+                : SelectedRestorationBranch == RestorationBranch.QuickReuse
+                    ? "Quick Reuse"
+                    : "Careful Exhibit";
+
+            return $"Day Budget\nCoins {Coins}   Hours {WorkHours}\nPaste {Paste}   Stone {StonePowder}\nTrust {NeighborhoodTrust}   Reputation {ScholarlyReputation}\nRoute {routeLabel}\n{BuildNextPressureText()}";
+        }
+
         public void ChooseRestorationBranch(RestorationBranch branch)
         {
             if (branch == RestorationBranch.None || SelectedRestorationBranch != RestorationBranch.None)
@@ -232,6 +291,39 @@ namespace ChanganRestorationBureau
             var outcomeLabel = string.IsNullOrEmpty(ResolvedOutcomeId) ? "Unresolved" : ResolvedOutcomeId;
             var branchLabel = SelectedRestorationBranch == RestorationBranch.None ? "Not chosen" : SelectedRestorationBranch.ToString();
             return $"Day Summary\nBranch: {branchLabel}\nOutcome: {outcomeLabel}\nCoins: {Coins}\nTrust: {NeighborhoodTrust}\nReputation: {ScholarlyReputation}\nWork Hours: {WorkHours}\nPaste: {Paste}\nStone Powder: {StonePowder}";
+        }
+
+        private string BuildNextPressureText()
+        {
+            if (!CommissionAccepted)
+            {
+                return "Next: Meet Han at the night market";
+            }
+
+            if (OutcomeResolved && !DaySummaryShown)
+            {
+                return "Next: Talk to Dou for the day ledger";
+            }
+
+            if ((currentPhase == ProofDayPhase.ArtifactCollected
+                || currentPhase == ProofDayPhase.ConsultationOpen
+                || currentPhase == ProofDayPhase.RestorationReady)
+                && SelectedRestorationBranch == RestorationBranch.None)
+            {
+                return "Bench: Quick -1h/-1 paste | Careful -1h/-1 stone";
+            }
+
+            if (SelectedRestorationBranch == RestorationBranch.QuickReuse && !OutcomeResolved)
+            {
+                return "Next: Return the restored tile to Han";
+            }
+
+            if (SelectedRestorationBranch == RestorationBranch.CarefulExhibit && !OutcomeResolved)
+            {
+                return "Next: Display the conserved tile";
+            }
+
+            return $"Stage: {currentPhase}";
         }
 
         private void SpendWorkHours(int amount)

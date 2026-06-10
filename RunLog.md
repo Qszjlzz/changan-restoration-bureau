@@ -189,3 +189,37 @@ Next return target:
 2. production furniture replacement for workbench/display
 3. dedicated NPC body + portrait art
 4. lotus-tile-specific hero artifact art and asset-id cleanup
+
+## 2026-06-10 Visible Day Budget Pass
+
+- Added a compact day-budget HUD to the official playable build through:
+  - `ProofResourceHudController`
+  - runtime bootstrap UI wiring in `ProofRuntimeBootstrap`
+  - new day-state budget text and next-pressure copy in `ProofDayState`
+- Added clearer blocked-action feedback for the management layer:
+  - Stele Rubbing Du now advertises `-1 hour` before consultation
+  - the workbench hint now announces a restoration-cost decision instead of a generic repair action
+  - the restoration-choice panel now reports why a branch is blocked and confirms the chosen spend
+- Reduced proof-like UI noise:
+  - the top guide now only surfaces `WASD move | E interact`
+  - the objective panel now emphasizes `Goal` plus `Route` instead of internal-style counters and phase labels
+- Updated the agent board and player-test script so the next loop can treat the visible-budget slice as verified and move on to art replacement.
+
+Verification:
+
+- Official Windows build passed through `ChanganProofBuild.BuildWindowsProof`
+  - build evidence log: `unity-build-player-v0_5_budget.log`
+  - executable refreshed at `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`
+- Asset QA: `tools/validate_asset_contract.py` passed with the same one non-blocking warning:
+  - `background_open_map.png` remains `3072x1728` instead of the written `3072x1792` spec
+- Smoke QA:
+  - `tools/smoke_play_proof.ps1 -Branch careful_exhibit` passed with two launches
+  - `tools/smoke_play_proof.ps1 -Branch quick_reuse` passed with two launches
+  - note: one earlier attempt failed only because both smoke branches were launched in parallel and fought over the same process/log files; sequential reruns were green
+
+Next return target:
+
+1. production workbench and display-case art replacement
+2. dedicated NPC body + portrait art
+3. lotus-tile hero art trio and runtime asset-id cleanup
+4. stronger day-summary emotional payoff
