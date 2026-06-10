@@ -132,3 +132,60 @@
   - `docs/NpcDialogue_v0_5.md`
   - `docs/NarrativeSmokeChecks.md`
 - Next gate: replace placeholder bureau furniture, add dedicated NPC/body/portrait production art, then introduce the first explicit restoration branch choice instead of the current fixed `careful_exhibit` outcome.
+## 2026-06-10 Blocked Run
+- Orchestrator was blocked before repo inspection because local execution tools failed during sandbox setup refresh.
+- `functions.shell_command` returned `windows sandbox: setup refresh failed with status exit code: 1`.
+- `mcp__node_repl.js` returned `node_repl kernel exited unexpectedly` with `windows sandbox failed: spawn setup refresh`.
+- No safe repo read, build, smoke, asset validation, or player-test actions were executed this run.
+- Next priority remains restoring local command execution so the official build and double-launch smoke flow can resume.
+## 2026-06-10 Automation note
+- This run was blocked before repository inspection because local execution tools failed during Windows sandbox refresh/setup.
+- `functions.shell_command` and `mcp__node_repl.js` both failed before command execution, so no build, smoke play, asset validation, or gameplay changes were attempted.
+- Resume from the standard workflow only after local command execution is restored.
+
+## 2026-06-10 Restoration Branch Choice Pass
+
+- Added a real restoration-choice layer to the official playable path:
+  - `ProofRestorationChoiceController`
+  - `AssetProofController` repair-choice handoff
+  - `InteractionController` choice-panel gating
+  - branch-aware objective, dialogue, and detail-panel states
+- Quick reuse and careful exhibit now diverge in player flow:
+  - `quick_reuse`: repair -> return directly to Han Niangzi
+  - `careful_exhibit`: repair -> display -> resolve with Han Niangzi
+- Updated smoke coverage so the official build can validate both restoration branches instead of only the old careful-only route:
+  - `tools/smoke_play_proof.ps1 -Branch careful_exhibit`
+  - `tools/smoke_play_proof.ps1 -Branch quick_reuse`
+  - `ProofSmokeAutoplay` now accepts `-smoke-branch`
+- Added and updated workflow docs so the multi-agent loop has a concrete current target:
+  - `docs/AgentLoopBoard.md`
+  - `docs/AgentWorkflow.md`
+  - `docs/DesignRoadmap.md`
+  - `docs/PlayerTestScript.md`
+  - `docs/NarrativeSmokeChecks.md`
+  - `README.md`
+- Updated the recurring automation `v0-4` to use the new loop board and to require smoke validation on both branches every run.
+
+Verification:
+
+- Asset QA: `tools/validate_asset_contract.py` passed with the same one non-blocking warning:
+  - `background_open_map.png` is still `3072x1728` instead of the written `3072x1792` spec
+- Official Windows build: passed through `ChanganProofBuild.BuildWindowsProof`
+  - build evidence log: `unity-build-player-v0_5.log`
+  - executable refreshed at `Build/ChanganRestorationBureau/ChanganRestorationBureau.exe`
+- Smoke QA:
+  - `careful_exhibit`: passed two launches
+  - `quick_reuse`: initially failed because the test was still launching an old executable; after a real waited rebuild, passed two launches
+
+Player-test/design/art takeaways from the sidecar agents:
+
+- Biggest current design gain: visible branch choice now matters, but the next slice should expose day-budget pressure more clearly in the HUD.
+- Biggest current art gap: placeholder workbench/display, fallback NPC bodies/portraits, and the generic roof-tile hero artifact should be the next GPT Image batch.
+- Biggest current test upgrade: keep branch coverage split across two fresh runs and avoid relying on debug selection during release-gate passes.
+
+Next return target:
+
+1. visible day-budget HUD and blocked-action feedback
+2. production furniture replacement for workbench/display
+3. dedicated NPC body + portrait art
+4. lotus-tile-specific hero artifact art and asset-id cleanup

@@ -1,7 +1,9 @@
 param(
     [string]$BuildRoot = "",
     [int]$LaunchCount = 2,
-    [int]$LaunchTimeoutSec = 25
+    [int]$LaunchTimeoutSec = 25,
+    [ValidateSet("careful_exhibit", "quick_reuse")]
+    [string]$Branch = "careful_exhibit"
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,11 +32,16 @@ $markers = @(
     "[Changan] Objective marked cleared",
     "[Changan] Objective marked sampled",
     "[Changan] Objective marked repaired",
-    "[Changan] Objective marked displayed",
-    "[Changan] Outcome resolved id=careful_exhibit",
     "[Changan] Day summary shown",
     "[Changan] Smoke autoplay completed"
 )
+
+if ($Branch -eq "careful_exhibit") {
+    $markers += "[Changan] Objective marked displayed"
+    $markers += "[Changan] Outcome resolved id=careful_exhibit"
+} else {
+    $markers += "[Changan] Outcome resolved id=quick_reuse"
+}
 
 $runResults = @()
 
@@ -44,7 +51,7 @@ for ($launchIndex = 1; $launchIndex -le $LaunchCount; $launchIndex++) {
         Remove-Item -LiteralPath $playerLog -Force
     }
 
-    $process = Start-Process -FilePath $exePath -WorkingDirectory $BuildRoot -ArgumentList '-screen-fullscreen','0','-screen-width','1280','-screen-height','720','-smoke-play' -PassThru
+    $process = Start-Process -FilePath $exePath -WorkingDirectory $BuildRoot -ArgumentList '-screen-fullscreen','0','-screen-width','1280','-screen-height','720','-smoke-play','-smoke-branch',$Branch -PassThru
     $completed = $process.WaitForExit($LaunchTimeoutSec * 1000)
     if (-not $completed) {
         Stop-Process -Id $process.Id -Force

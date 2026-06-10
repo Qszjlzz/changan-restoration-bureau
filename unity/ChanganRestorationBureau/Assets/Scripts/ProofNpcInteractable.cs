@@ -40,7 +40,25 @@ namespace ChanganRestorationBureau
             switch (npcId)
             {
                 case "han_niangzi":
-                    return dayState != null && !dayState.CommissionAccepted ? "Press E to take the commission" : "Press E to talk to Han Niangzi";
+                    if (dayState != null && !dayState.CommissionAccepted)
+                    {
+                        return "Press E to take the commission";
+                    }
+
+                    if (dayState != null && objective != null && objective.Repaired && !dayState.OutcomeResolved)
+                    {
+                        if (dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse)
+                        {
+                            return "Press E to return the restored tile";
+                        }
+
+                        if (dayState.SelectedRestorationBranch == RestorationBranch.CarefulExhibit && objective.Displayed)
+                        {
+                            return "Press E to resolve the exhibition";
+                        }
+                    }
+
+                    return "Press E to talk to Han Niangzi";
                 case "apprentice_dou":
                     return dayState != null && dayState.OutcomeResolved && !dayState.DaySummaryShown ? "Press E to read the day ledger" : "Press E to talk to Apprentice Dou";
                 case "stele_du":
@@ -93,7 +111,28 @@ namespace ChanganRestorationBureau
                 };
             }
 
-            if (objective != null && objective.Displayed && !dayState.OutcomeResolved)
+            if (objective != null
+                && objective.Repaired
+                && dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse
+                && !dayState.OutcomeResolved)
+            {
+                return new ProofConversation
+                {
+                    speakerName = "Han Niangzi",
+                    portrait = portraitSprite,
+                    lines = new[]
+                    {
+                        "You kept its wear, but made it strong enough to return.",
+                        "That is how our market survives. We mend what we can and keep the stall front breathing."
+                    },
+                    onComplete = () => dayState.ResolveOutcome("quick_reuse")
+                };
+            }
+
+            if (objective != null
+                && objective.Displayed
+                && dayState.SelectedRestorationBranch == RestorationBranch.CarefulExhibit
+                && !dayState.OutcomeResolved)
             {
                 return new ProofConversation
                 {
@@ -110,18 +149,21 @@ namespace ChanganRestorationBureau
 
             if (dayState.OutcomeResolved)
             {
+                var resolvedQuickReuse = string.Equals(dayState.ResolvedOutcomeId, "quick_reuse", System.StringComparison.OrdinalIgnoreCase);
                 return new ProofConversation
                 {
                     speakerName = "Han Niangzi",
                     portrait = portraitSprite,
                     lines = new[]
                     {
-                        "Thank you. It feels lighter now, whatever shape its future takes."
+                        resolvedQuickReuse
+                            ? "Thank you. It can stand with us again, and that matters."
+                            : "Thank you. It feels lighter now, whatever shape its future takes."
                     }
                 };
             }
 
-            if (objective != null && objective.Sampled)
+            if (objective != null && objective.Sampled && !objective.Repaired)
             {
                 return new ProofConversation
                 {
@@ -131,6 +173,23 @@ namespace ChanganRestorationBureau
                     {
                         "You found it? Good. The soot always made the pattern hard to read.",
                         "When you decide, I will trust your judgment."
+                    }
+                };
+            }
+
+            if (objective != null
+                && objective.Repaired
+                && dayState.SelectedRestorationBranch == RestorationBranch.CarefulExhibit
+                && !objective.Displayed)
+            {
+                return new ProofConversation
+                {
+                    speakerName = "Han Niangzi",
+                    portrait = portraitSprite,
+                    lines = new[]
+                    {
+                        "If you wish to keep it for display, let me see it in the bureau case first.",
+                        "I want to understand what others will see when they look at it."
                     }
                 };
             }
@@ -196,6 +255,22 @@ namespace ChanganRestorationBureau
                         "After that, you must decide whether to ready it for use or conserve it properly."
                     },
                     onComplete = dayState.MarkRestorationReady
+                };
+            }
+
+            if (objective != null && objective.Repaired && !dayState.OutcomeResolved)
+            {
+                var reminder = dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse
+                    ? "Han Niangzi is waiting at the market so the tile can return to use."
+                    : "Set the tile on the display stand so Han can judge the exhibit path.";
+                return new ProofConversation
+                {
+                    speakerName = "Apprentice Dou",
+                    portrait = portraitSprite,
+                    lines = new[]
+                    {
+                        reminder
+                    }
                 };
             }
 

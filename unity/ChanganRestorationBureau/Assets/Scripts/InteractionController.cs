@@ -8,6 +8,7 @@ namespace ChanganRestorationBureau
         public ProofObjectiveState objective;
         public AssetProofController proofController;
         public ProofDialogueController dialogue;
+        public ProofRestorationChoiceController restorationChoice;
         public ProofDayState dayState;
 
         private InteractionTarget current;
@@ -31,6 +32,17 @@ namespace ChanganRestorationBureau
                     dialogue.Advance();
                 }
 
+                return;
+            }
+
+            if (restorationChoice != null && restorationChoice.IsOpen)
+            {
+                if (objective != null)
+                {
+                    objective.SetHint(restorationChoice.FooterHint);
+                }
+
+                restorationChoice.HandleRuntimeInput();
                 return;
             }
 
@@ -104,7 +116,9 @@ namespace ChanganRestorationBureau
                 case InteractionKind.Repair:
                     return objective.Sampled && !objective.Repaired;
                 case InteractionKind.Display:
-                    return objective.Repaired && !objective.Displayed;
+                    return objective.Repaired
+                        && !objective.Displayed
+                        && (dayState == null || dayState.SelectedRestorationBranch != RestorationBranch.QuickReuse);
                 case InteractionKind.Talk:
                     return target.npc != null && target.npc.CanInteract(dayState, objective);
                 default:
@@ -129,8 +143,7 @@ namespace ChanganRestorationBureau
                     break;
                 case InteractionKind.Repair:
                     proofController.SelectArtifactFromInteraction(objective.targetArtifact);
-                    proofController.RepairSelected();
-                    objective.MarkRepaired();
+                    proofController.RequestRepairChoice();
                     break;
                 case InteractionKind.Display:
                     proofController.SelectArtifactFromInteraction(objective.targetArtifact);

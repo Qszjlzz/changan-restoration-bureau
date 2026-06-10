@@ -48,9 +48,10 @@ Run this section before any manual narrative walk.
 
 | Check | Pass? | Notes |
 | --- | --- | --- |
-| `tools/smoke_play_proof.ps1` completes without failure |  |  |
+| `tools/smoke_play_proof.ps1 -Branch careful_exhibit` completes without failure |  |  |
+| `tools/smoke_play_proof.ps1 -Branch quick_reuse` completes without failure |  |  |
 | Script confirms expected startup markers |  |  |
-| Script confirms expected interaction markers |  |  |
+| Script confirms expected interaction markers for both branches |  |  |
 | Script exit code is `0` |  |  |
 | Manual launch result and smoke-play result agree |  |  |
 
@@ -114,6 +115,7 @@ This section is only about getting the player from free roam into a real owned t
 | Accepting the commission changes the active day state |  |  |
 | A fresh objective appears immediately after acceptance |  |  |
 | Player can tell where to go next without external explanation |  |  |
+| Player can restate what the tile is and why it matters after the first talk |  |  |
 
 Decision note:
 
@@ -159,7 +161,8 @@ Objective text is part of the narrative contract. The player should be able to t
 | After artifact pickup |  |  |  |
 | After optional consult |  |  |  |
 | After repair choice unlock |  |  |  |
-| After restoration branch resolution |  |  |  |
+| After quick reuse branch resolution |  |  |  |
+| After careful exhibit branch resolution |  |  |  |
 | After return/exhibit outcome |  |  |  |
 | At day summary |  |  |  |
 
@@ -202,4 +205,3 @@ Use this to decide who gets the return.
 - Repro steps:
 - What still feels good:
 - What most needs the next pass:
-

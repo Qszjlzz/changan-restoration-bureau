@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +11,19 @@ namespace ChanganRestorationBureau
         public List<RestorationArtifact> artifacts = new List<RestorationArtifact>();
         public List<ProofSlot> displaySlots = new List<ProofSlot>();
         public ProofSlot workbenchSlot;
+        public ProofDayState dayState;
+
+        public event Action<RestorationArtifact> RepairChoiceRequested;
 
         private RestorationArtifact selected;
 
         private void Start()
         {
+            if (dayState == null)
+            {
+                dayState = GetComponent<ProofDayState>();
+            }
+
             Debug.Log($"[Changan] AssetProofController.Start artifacts={artifacts.Count} displays={displaySlots.Count} workbench={(workbenchSlot != null)} ui={(ui != null)}");
             if (ui == null)
             {
@@ -49,20 +58,33 @@ namespace ChanganRestorationBureau
                 return;
             }
 
-            Debug.Log($"[Changan] RepairSelected artifact={selected.artifactId}");
-            selected.Repair();
-            if (workbenchSlot != null && !selected.IsDisplayed)
+            if (selected.IsRepaired)
             {
-                workbenchSlot.TryPlace(selected);
+                ui.ShowSelection(selected);
+                return;
             }
 
-            ui.ShowSelection(selected);
+            if (dayState != null && dayState.SelectedRestorationBranch == RestorationBranch.None)
+            {
+                RequestRepairChoice();
+                return;
+            }
+
+            var branch = dayState != null ? dayState.SelectedRestorationBranch : RestorationBranch.QuickReuse;
+            TryApplyRestorationChoice(branch);
         }
 
         public void DisplaySelected()
         {
             if (selected == null || !selected.IsRepaired)
             {
+                return;
+            }
+
+            if (dayState != null && dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse)
+            {
+                Debug.Log("[Changan] DisplaySelected blocked because the quick reuse route returns directly to Han.");
+                ui.ShowSelection(selected);
                 return;
             }
 
@@ -97,6 +119,76 @@ namespace ChanganRestorationBureau
         public void SelectArtifactFromInteraction(RestorationArtifact artifact)
         {
             SelectArtifact(artifact);
+        }
+
+        public void RequestRepairChoice()
+        {
+            if (selected == null || selected.IsRepaired)
+            {
+                return;
+            }
+
+            if (dayState == null)
+            {
+                dayState = GetComponent<ProofDayState>();
+            }
+
+            if (dayState != null && dayState.SelectedRestorationBranch != RestorationBranch.None)
+            {
+                TryApplyRestorationChoice(dayState.SelectedRestorationBranch);
+                return;
+            }
+
+            Debug.Log($"[Changan] Repair choice requested artifact={selected.artifactId}");
+            RepairChoiceRequested?.Invoke(selected);
+        }
+
+        public bool TryApplyRestorationChoice(RestorationBranch branch)
+        {
+            if (selected == null)
+            {
+                return false;
+            }
+
+            if (selected.IsRepaired)
+            {
+                ui.ShowSelection(selected);
+                return true;
+            }
+
+            if (dayState == null)
+            {
+                dayState = GetComponent<ProofDayState>();
+            }
+
+            if (dayState != null)
+            {
+                if (dayState.SelectedRestorationBranch == RestorationBranch.None)
+                {
+                    if (!dayState.CanChooseBranch(branch))
+                    {
+                        Debug.LogWarning($"[Changan] Repair choice blocked branch={branch} artifact={selected.artifactId}");
+                        return false;
+                    }
+
+                    dayState.ChooseRestorationBranch(branch);
+                }
+                else if (dayState.SelectedRestorationBranch != branch)
+                {
+                    Debug.LogWarning($"[Changan] Repair choice mismatch requested={branch} selected={dayState.SelectedRestorationBranch}");
+                    return false;
+                }
+            }
+
+            Debug.Log($"[Changan] RepairSelected artifact={selected.artifactId} branch={branch}");
+            selected.Repair();
+            if (workbenchSlot != null && workbenchSlot.Occupant != selected && !selected.IsDisplayed)
+            {
+                workbenchSlot.TryPlace(selected);
+            }
+
+            ui.ShowSelection(selected);
+            return true;
         }
 
         private void SelectArtifact(RestorationArtifact artifact)

@@ -41,6 +41,8 @@ namespace ChanganRestorationBureau
                 objective.targetArtifact = controller.artifacts[0];
             }
             objective.dayState = dayState;
+            var restorationChoice = BuildRestorationChoiceUi(ui.transform.parent);
+            restorationChoice.Bind(controller, dayState, objective);
 
             var guide = CreateText("HintText", ui.transform, new Vector2(-250f, 320f), new Vector2(650f, 40f), 20, TextAnchor.MiddleLeft);
             guide.text = "WASD move | E interact | click or 1-6 select relics";
@@ -52,6 +54,7 @@ namespace ChanganRestorationBureau
                 interaction.objective = objective;
                 interaction.dayState = dayState;
                 interaction.dialogue = dialogue;
+                interaction.restorationChoice = restorationChoice;
             }
 
             foreach (var artifact in controller.artifacts)
@@ -61,6 +64,13 @@ namespace ChanganRestorationBureau
                 {
                     target.artifact = artifact;
                 }
+            }
+
+            var smokeAutoplay = controller.GetComponent<ProofSmokeAutoplay>();
+            if (smokeAutoplay != null)
+            {
+                smokeAutoplay.dayState = dayState;
+                smokeAutoplay.restorationChoice = restorationChoice;
             }
 
             Debug.Log("[Changan] ProofRuntimeBootstrap.Awake complete");
@@ -108,6 +118,37 @@ namespace ChanganRestorationBureau
             controller.footerText.color = new Color32(214, 197, 168, 255);
             controller.portraitImage = CreateImage("DialoguePortrait", panel.transform, new Vector2(-470f, -4f), new Vector2(112f, 112f), new Color32(255, 255, 255, 210));
             controller.portraitImage.enabled = false;
+            return controller;
+        }
+
+        private static ProofRestorationChoiceController BuildRestorationChoiceUi(Transform parent)
+        {
+            var panel = CreateUiRect("RestorationChoicePanel", parent, new Vector2(0f, 35f), new Vector2(560f, 270f), new Color32(53, 40, 32, 238));
+            panel.SetActive(false);
+            var controller = panel.AddComponent<ProofRestorationChoiceController>();
+            controller.panelRoot = panel;
+            controller.titleText = CreateText("ChoiceTitle", panel.transform, new Vector2(0f, 95f), new Vector2(460f, 34f), 24, TextAnchor.MiddleCenter);
+            controller.titleText.color = new Color32(244, 222, 170, 255);
+            controller.bodyText = CreateText("ChoiceBody", panel.transform, new Vector2(0f, 48f), new Vector2(470f, 56f), 18, TextAnchor.MiddleCenter);
+            controller.bodyText.color = new Color32(235, 223, 201, 255);
+            controller.resourceText = CreateText("ChoiceResources", panel.transform, new Vector2(0f, 8f), new Vector2(430f, 28f), 16, TextAnchor.MiddleCenter);
+            controller.resourceText.color = new Color32(214, 197, 168, 255);
+            controller.quickReuseButton = CreateButton("QuickReuseButton", panel.transform, new Vector2(-128f, -70f), new Vector2(196f, 88f), "", null);
+            controller.carefulExhibitButton = CreateButton("CarefulExhibitButton", panel.transform, new Vector2(128f, -70f), new Vector2(196f, 88f), "", null);
+            controller.quickLabelText = controller.quickReuseButton.GetComponentInChildren<Text>();
+            controller.carefulLabelText = controller.carefulExhibitButton.GetComponentInChildren<Text>();
+            if (controller.quickLabelText != null)
+            {
+                controller.quickLabelText.fontSize = 16;
+            }
+
+            if (controller.carefulLabelText != null)
+            {
+                controller.carefulLabelText.fontSize = 16;
+            }
+
+            controller.footerText = CreateText("ChoiceFooter", panel.transform, new Vector2(0f, -120f), new Vector2(420f, 24f), 14, TextAnchor.MiddleCenter);
+            controller.footerText.color = new Color32(214, 197, 168, 255);
             return controller;
         }
 

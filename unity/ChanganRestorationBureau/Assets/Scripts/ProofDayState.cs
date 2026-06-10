@@ -16,6 +16,13 @@ namespace ChanganRestorationBureau
         DaySummary
     }
 
+    public enum RestorationBranch
+    {
+        None,
+        QuickReuse,
+        CarefulExhibit
+    }
+
     [Serializable]
     public sealed class ProofNarrativeCatalog
     {
@@ -64,6 +71,8 @@ namespace ChanganRestorationBureau
         public ProofDayPhase currentPhase = ProofDayPhase.FreeRoamStart;
         public int startingCoins = 12;
         public int startingWorkHours = 5;
+        public int startingPaste = 2;
+        public int startingStonePowder = 1;
         public int startingNeighborhoodTrust;
         public int startingScholarlyReputation;
 
@@ -73,8 +82,11 @@ namespace ChanganRestorationBureau
         public bool OutcomeResolved { get; private set; }
         public bool DaySummaryShown { get; private set; }
         public string ResolvedOutcomeId { get; private set; }
+        public RestorationBranch SelectedRestorationBranch { get; private set; }
         public int Coins { get; private set; }
         public int WorkHours { get; private set; }
+        public int Paste { get; private set; }
+        public int StonePowder { get; private set; }
         public int NeighborhoodTrust { get; private set; }
         public int ScholarlyReputation { get; private set; }
 
@@ -84,6 +96,8 @@ namespace ChanganRestorationBureau
         {
             Coins = startingCoins;
             WorkHours = startingWorkHours;
+            Paste = startingPaste;
+            StonePowder = startingStonePowder;
             NeighborhoodTrust = startingNeighborhoodTrust;
             ScholarlyReputation = startingScholarlyReputation;
             LoadCatalog();
@@ -137,6 +151,48 @@ namespace ChanganRestorationBureau
             SetPhase(ProofDayPhase.RestorationReady);
         }
 
+        public bool CanChooseBranch(RestorationBranch branch)
+        {
+            switch (branch)
+            {
+                case RestorationBranch.QuickReuse:
+                    return WorkHours > 0 && Paste > 0;
+                case RestorationBranch.CarefulExhibit:
+                    return WorkHours > 0 && StonePowder > 0;
+                default:
+                    return false;
+            }
+        }
+
+        public void ChooseRestorationBranch(RestorationBranch branch)
+        {
+            if (branch == RestorationBranch.None || SelectedRestorationBranch != RestorationBranch.None)
+            {
+                return;
+            }
+
+            if (!CanChooseBranch(branch))
+            {
+                Debug.LogWarning($"[Changan] Cannot choose restoration branch branch={branch} hours={WorkHours} paste={Paste} stone={StonePowder}");
+                return;
+            }
+
+            SelectedRestorationBranch = branch;
+            SpendWorkHours(1);
+            switch (branch)
+            {
+                case RestorationBranch.QuickReuse:
+                    Paste = Mathf.Max(0, Paste - 1);
+                    break;
+                case RestorationBranch.CarefulExhibit:
+                    StonePowder = Mathf.Max(0, StonePowder - 1);
+                    break;
+            }
+
+            Debug.Log($"[Changan] Restoration branch chosen branch={branch} hours={WorkHours} paste={Paste} stone={StonePowder}");
+            NotifyStateChanged();
+        }
+
         public void ResolveOutcome(string outcomeId)
         {
             if (OutcomeResolved)
@@ -174,7 +230,8 @@ namespace ChanganRestorationBureau
         public string BuildSummaryText()
         {
             var outcomeLabel = string.IsNullOrEmpty(ResolvedOutcomeId) ? "Unresolved" : ResolvedOutcomeId;
-            return $"Day Summary\nOutcome: {outcomeLabel}\nCoins: {Coins}\nTrust: {NeighborhoodTrust}\nReputation: {ScholarlyReputation}\nWork Hours: {WorkHours}";
+            var branchLabel = SelectedRestorationBranch == RestorationBranch.None ? "Not chosen" : SelectedRestorationBranch.ToString();
+            return $"Day Summary\nBranch: {branchLabel}\nOutcome: {outcomeLabel}\nCoins: {Coins}\nTrust: {NeighborhoodTrust}\nReputation: {ScholarlyReputation}\nWork Hours: {WorkHours}\nPaste: {Paste}\nStone Powder: {StonePowder}";
         }
 
         private void SpendWorkHours(int amount)

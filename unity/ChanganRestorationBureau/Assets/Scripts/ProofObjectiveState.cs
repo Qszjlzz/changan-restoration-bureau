@@ -74,6 +74,11 @@ namespace ChanganRestorationBureau
 
         public void MarkRepaired()
         {
+            if (Repaired)
+            {
+                return;
+            }
+
             Repaired = true;
             Debug.Log("[Changan] Objective marked repaired");
             if (dayState != null)
@@ -85,6 +90,11 @@ namespace ChanganRestorationBureau
 
         public void MarkDisplayed()
         {
+            if (Displayed)
+            {
+                return;
+            }
+
             Displayed = true;
             Debug.Log("[Changan] Objective marked displayed");
             Refresh();
@@ -99,7 +109,10 @@ namespace ChanganRestorationBureau
 
             var step = BuildStepText();
             var phase = dayState != null ? dayState.currentPhase.ToString() : "Proof";
-            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1  Phase: {phase}";
+            var branch = dayState != null && dayState.SelectedRestorationBranch != RestorationBranch.None
+                ? dayState.SelectedRestorationBranch.ToString()
+                : "Pending";
+            objectiveText.text = $"Goal: {step}\nFound: {(Sampled ? 1 : 0)}/1  Displayed: {(Displayed ? 1 : 0)}/1  Branch: {branch}  Phase: {phase}";
         }
 
         private string BuildStepText()
@@ -122,13 +135,18 @@ namespace ChanganRestorationBureau
             if (!Repaired)
             {
                 return dayState.HasConsultedSteleDu
-                    ? "Return to the bureau and restore the lotus roof tile"
+                    ? "Return to the bureau and choose a restoration path"
                     : "Optional: consult Stele Rubbing Du, then return to the bureau";
             }
 
-            if (!Displayed)
+            if (dayState != null && dayState.SelectedRestorationBranch == RestorationBranch.QuickReuse && !dayState.OutcomeResolved)
             {
-                return "Place the restored tile on the display stand";
+                return "Return the restored tile to Han Niangzi";
+            }
+
+            if (dayState != null && dayState.SelectedRestorationBranch == RestorationBranch.CarefulExhibit && !Displayed)
+            {
+                return "Place the conserved tile on the display stand";
             }
 
             if (dayState != null && !dayState.OutcomeResolved)

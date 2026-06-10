@@ -2,7 +2,7 @@
 
 ## Current Diagnosis
 
-The prototype proves movement, placement, repair, and display, but the actions do not yet create meaningful decisions, relationships, or management pressure. The official proof build also has a P0 scene-load crash, while the visual preview does not contain the complete gameplay loop.
+The official playable build is now stable enough to launch and complete the first scripted route, but the experience still reads as a guided proof more than a real management day. The biggest gaps are visible decision pressure, branch-specific payoff, and final replacement of the most obvious placeholder furniture and fallback NPC visuals.
 
 ## v0.5: One Complete Day
 
@@ -17,7 +17,14 @@ Content slice: `The Lotus Roof Tile Of The Night Market`.
 - Add one restoration decision: fast cosmetic repair for reuse, or careful conservation for exhibition.
 - Reward money, neighborhood trust, and scholarly reputation differently.
 - End the day with an exhibition or return response and a clear summary.
-- Replace the preview/full-build split with one stable executable.
+- Keep one stable official executable as the only accepted release path.
+
+Immediate execution order inside `v0.5`:
+
+1. workbench branch choice
+2. visible day budget and blocked-action feedback
+3. dedicated NPC and furniture art replacement
+4. richer outcome and summary readability
 
 Minimum numbers:
 
@@ -31,7 +38,7 @@ Minimum numbers:
 
 Acceptance:
 
-- Fresh launch -> talk -> investigate -> collect -> repair choice -> exhibit -> reward -> day summary.
+- Fresh launch -> talk -> investigate -> collect -> repair choice -> return or exhibit -> reward -> day summary.
 - The build launches twice with no P0/P1 issue.
 - The player understands why the two repair choices differ.
 - The player makes at least two choices that affect time, money, reputation, or dialogue.

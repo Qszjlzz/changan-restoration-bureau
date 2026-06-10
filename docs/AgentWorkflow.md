@@ -75,7 +75,9 @@ Next Return Target:
 The official gameplay executable now reaches runtime and loads the playable proof scene after the interaction-target serialization fix. The next accepted change must:
 
 1. keep passing the two-launch smoke-play check through `tools/smoke_play_proof.ps1`,
-2. replace remaining placeholder furniture and swap fallback NPC visuals to dedicated production assets,
-3. extend the `v0.5` commission slice from `docs/TaskSlice_v0_5_LotusTile.md` from simple dialogue gates into a real restoration branch choice with different outcomes and summary text.
+2. extend the `v0.5` commission slice from `docs/TaskSlice_v0_5_LotusTile.md` from simple dialogue gates into a real restoration branch choice with different outcomes and summary text,
+3. replace remaining placeholder furniture and swap fallback NPC visuals to dedicated production assets.
 
 New NPCs, dialogue, and economy work should ship only through that stable executable path, with Player Test using `docs/PlayerTestReportTemplate.md` plus `docs/NarrativeSmokeChecks.md`, and Art using `docs/ArtGapAudit_v0_5.md` as the handoff contract.
+
+The current cross-agent board lives in `docs/AgentLoopBoard.md`. Every automation run should follow its approved slice, owner rules, and next queue.
